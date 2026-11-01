@@ -1,0 +1,314 @@
+:root {
+  color-scheme: dark;
+  --bg: #050a0d;
+  --panel: rgba(6, 17, 21, 0.82);
+  --panel-solid: #081318;
+  --text: #e6f6f2;
+  --muted: #86a5a7;
+  --faint: rgba(161, 224, 226, 0.44);
+  --line: rgba(157, 233, 229, 0.16);
+  --cyan: #82efdf;
+  --cyan-bright: #b9fff4;
+  --amber: #ffb35c;
+  --amber-soft: #e38b3d;
+  --danger: #ff705d;
+  --font-display: 'Chakra Petch', 'Segoe UI', sans-serif;
+  --font-body: 'Rajdhani', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+}
+
+#scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 42%, transparent 25%, rgba(2, 7, 9, 0.55) 100%),
+    linear-gradient(180deg, rgba(2, 8, 10, 0.28), transparent 23%, transparent 74%, rgba(2, 8, 10, 0.68));
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#title-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.4rem, 2.8vw, 3.2rem) clamp(1.8rem, 4vw, 5.5rem);
+  background:
+    radial-gradient(ellipse at 6% 82%, rgba(6, 16, 19, 0.86) 0%, transparent 55%),
+    linear-gradient(90deg, rgba(3, 10, 13, 0.72), transparent 60%);
+  pointer-events: auto;
+  animation: fade-in 1.4s ease both;
+}
+
+#title-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, transparent 80%, rgba(2, 8, 10, 0.6) 100%);
+}
+
+.title-topline,
+.title-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.title-topline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.8rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--line), transparent 70%);
+}
+
+.title-topline span:first-child {
+  color: var(--cyan);
+}
+
+.title-copy {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin: auto 0;
+  width: min(46rem, 62vw);
+  padding-bottom: 2vh;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.62rem, 0.72vw, 0.76rem);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--amber);
+}
+
+.eyebrow span {
+  width: 2.2rem;
+  height: 1px;
+  background: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
+}
+
+h1 {
+  margin: 1rem 0 1.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(4.2rem, 9.4vw, 10.5rem);
+  line-height: 0.76;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  color: #eaf9f5;
+  text-shadow: 0 10px 60px rgba(0, 0, 0, 0.45);
+}
+
+h1 em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(146, 255, 235, 0.78);
+  filter: drop-shadow(0 0 28px rgba(74, 255, 222, 0.12));
+}
+
+.lede {
+  max-width: 30rem;
+  margin: 0 0 2rem;
+  color: #a8c1bf;
+  font-size: clamp(1.02rem, 1.24vw, 1.24rem);
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.015em;
+}
+
+.title-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.btn {
+  position: relative;
+  appearance: none;
+  border: 1px solid transparent;
+  padding: 0.95rem 1.4rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 0.75rem) 0, 100% 0.75rem, 100% 100%, 0.75rem 100%, 0 100%);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+
+.btn-primary {
+  min-width: 14.5rem;
+  display: inline-flex;
+  justify-content: space-between;
+  gap: 2rem;
+  color: #061113;
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.btn-primary:hover {
+  background: #d8fff8;
+  box-shadow: 0 0 38px rgba(107, 255, 230, 0.18);
+}
+
+.btn-primary span {
+  color: #0b5654;
+}
+
+.btn-ghost {
+  border-color: rgba(148, 222, 218, 0.25);
+  color: #a7c5c3;
+  background: rgba(5, 14, 17, 0.38);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: rgba(148, 222, 218, 0.6);
+  color: var(--text);
+}
+
+.btn:disabled {
+  opacity: 0.36;
+  cursor: not-allowed;
+}
+
+.title-meta {
+  display: flex;
+  gap: 1.6rem;
+  margin-top: 2.2rem;
+  color: #5e7d7d;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.title-meta span {
+  position: relative;
+}
+
+.title-meta span + span::before {
+  content: '';
+  position: absolute;
+  left: -0.85rem;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #51706f;
+}
+
+.title-footer {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(144, 219, 214, 0.1);
+  color: #5d7a79;
+}
+
+#boot-status {
+  color: #86c5bd;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(170, 255, 245, 0.12) 3px,
+    rgba(170, 255, 245, 0.12) 4px
+  );
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .title-copy {
+    width: 100%;
+  }
+  .title-meta {
+    display: none;
+  }
+  h1 {
+    font-size: clamp(3.4rem, 18vw, 6rem);
+  }
+  .title-topline span:last-child,
+  .title-footer span:last-child {
+    display: none;
+  }
+}

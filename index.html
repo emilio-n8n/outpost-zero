@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OUTPOST ZERO — a stylized 3D alien survival game. Scavenge, craft, build shelter and survive the night."
+    />
+    <meta name="theme-color" content="#050b10" />
+    <title>OUTPOST ZERO — Alien Survival</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #050b10;
+        overflow: hidden;
+      }
+      #app {
+        min-height: 100vh;
+      }
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 45%, #0d2025 0%, #050b10 65%);
+        color: #d6f5f1;
+        font-family: monospace;
+        letter-spacing: 0.3em;
+        font-size: 12px;
+        z-index: 100;
+        transition: opacity 0.5s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="boot-splash">OUTPOST ZERO // ESTABLISHING UPLINK</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
