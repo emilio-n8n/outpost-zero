@@ -12,15 +12,15 @@ export interface CameraTarget {
 export class CameraRig {
   readonly camera: THREE.PerspectiveCamera;
   yaw: number;
-  pitch = CAMERA.defaultPitch;
+  pitch: number = CAMERA.defaultPitch;
   sensitivity = 1;
-  private currentDistance = CAMERA.distance;
+  private currentDistance: number = CAMERA.distance;
   private readonly currentPosition = new THREE.Vector3();
   private readonly targetPosition = new THREE.Vector3();
   private readonly lookDirection = new THREE.Vector3(0, 0, 1);
   private shake = 0;
   private shakeTime = 0;
-  private fov = CAMERA.baseFov;
+  private fov: number = CAMERA.baseFov;
   private initialized = false;
   private readonly terrain: Terrain;
 

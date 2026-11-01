@@ -816,7 +816,8 @@ export class UI {
   private recipeCard(recipe: RecipeDefinition): string {
     const state = this.game.recipeState(recipe.id);
     const owned = state.reason === 'Already crafted';
-    const blueprint = recipe.blueprint ? BLUEPRINTS[recipe.blueprint] : null;
+    const blueprintId = recipe.blueprint;
+    const blueprint = blueprintId ? BLUEPRINTS[blueprintId] : null;
     const status = owned ? 'OWNED' : state.ok ? 'READY TO FABRICATE' : (state.reason ?? 'UNAVAILABLE');
     const buttonLabel = owned ? 'INSTALLED' : state.ok ? 'FABRICATE' : 'LOCKED';
     return `<article class="recipe-card ${state.ok ? 'is-ready' : ''} ${owned ? 'is-owned' : ''}">
@@ -826,7 +827,7 @@ export class UI {
         <p>${recipe.description}</p>
         <div class="recipe-costs">${costMarkup(recipe.cost, this.game.inventory.resources)}</div>
         <div class="recipe-flags">
-          ${blueprint ? `<span class="${this.game.objectives.blueprints.includes(recipe.blueprint) ? 'is-met' : 'is-missing'}">${icon('blueprint')} ${blueprint.site.toUpperCase()}</span>` : ''}
+          ${blueprintId ? `<span class="${this.game.objectives.blueprints.includes(blueprintId) ? 'is-met' : 'is-missing'}">${icon('blueprint')} ${blueprint?.site.toUpperCase()}</span>` : ''}
           ${recipe.requiresFire ? `<span class="${this.game.getNearbyFire() ? 'is-met' : 'is-missing'}">${icon('campfire')} LIT CAMPFIRE</span>` : ''}
         </div>
       </div>
@@ -1253,7 +1254,7 @@ export class UI {
     let weaponText = 'UNARMED';
     if (selectedItem?.id === 'blade') weaponText = 'ARC CUTTER // READY';
     else if (selectedItem?.id === 'rifle') weaponText = `PULSE RIFLE // CHARGE ${energy}`;
-    else if (selectedItem) weaponText = `${selectedItem.short} ×${selected.qty ?? 0} // LMB USE`;
+    else if (selectedItem) weaponText = `${selectedItem.short} ×${selected?.qty ?? 0} // LMB USE`;
     this.setText('weapon-readout', weaponText);
     this.get('weapon-readout').classList.toggle('is-low', selectedItem?.id === 'rifle' && energy <= 2);
 

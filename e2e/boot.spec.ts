@@ -48,7 +48,7 @@ test.describe('OUTPOST ZERO', () => {
     await page.screenshot({ path: testInfo.outputPath('02-daylight.png') });
 
     const before = await debugState(page);
-    expect(before.health).toBeGreaterThan(0);
+    expect(before.player.health).toBeGreaterThan(0);
     expect(before.seed.length).toBeGreaterThan(2);
 
     await page.keyboard.down('w');

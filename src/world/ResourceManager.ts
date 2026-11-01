@@ -119,7 +119,7 @@ export class ResourceManager {
   private readonly highlight: THREE.Mesh;
   private readonly highlightMaterial: THREE.MeshBasicMaterial;
   private readonly occupied: Array<{ x: number; z: number; radius: number }> = [];
-  private readonly addCollider: (collider: CircleCollider) => void;
+  private readonly addCollider: (collider: CircleCollider) => CircleCollider;
   private elapsed = 0;
   private highlightNode: ResourceNode | null = null;
 
@@ -128,7 +128,7 @@ export class ResourceManager {
     terrain: Terrain,
     seed: string,
     blocked: Array<{ x: number; z: number; radius: number }>,
-    addCollider: (collider: CircleCollider) => void,
+    addCollider: (collider: CircleCollider) => CircleCollider,
   ) {
     this.scene = scene;
     this.terrain = terrain;
@@ -321,10 +321,11 @@ export class ResourceManager {
       }
     }
 
+    const nodeRadius = NODE_CONFIG[type].radius * scale;
     const collider = this.addCollider({
       x,
       z,
-      radius: radius,
+      radius: nodeRadius,
       enabled: true,
       blocksSight: type === 'wood' || type === 'energy',
       tag: 'node',
@@ -336,7 +337,7 @@ export class ResourceManager {
       type,
       position,
       scale,
-      radius,
+      radius: nodeRadius,
       visible: true,
       respawnRemaining: 0,
       collider,
@@ -344,7 +345,7 @@ export class ResourceManager {
     };
     collider.id = node.id;
     this.nodes.push(node);
-    this.occupied.push({ x, z, radius });
+    this.occupied.push({ x, z, radius: nodeRadius });
     return node;
   }
 

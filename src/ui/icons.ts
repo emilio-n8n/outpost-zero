@@ -33,6 +33,7 @@ const paths: Record<IconName, string> = {
   pick: '<path d="m5 20 10-10"/><path d="M8 7c4-4 9-4 12-2-2 3-5 5-8 5-1 0-2-.2-3-.8L8 11 5 8l3-1Z"/><path d="m4 21 2-2"/>',
   campfire: '<path d="M12 21c4 0 6-2.4 6-5.5 0-3-2.3-4.8-3.4-7.3-.5 2.3-1.6 3.1-2.4 3.7.2-2.7-1.5-5-2.8-7.4.1 3.6-3.4 5.5-3.4 10.4C6 18.2 8.3 21 12 21Z"/><path d="M9 17c.4 1.3 1.5 2 3 2"/><path d="m4 21 4-1M20 21l-4-1"/>',
   shield: '<path d="M12 2 20 5v7c0 5-3.6 8.2-8 10-4.4-1.8-8-5-8-10V5l8-3Z"/><path d="M8 10h8M8 14h8M12 7v10"/>',
+  wall: '<path d="M3 21V8l9-5 9 5v13H3Z"/><path d="M3 13h18M9 8v13M15 8v13M9 3v5M15 3v5"/>',
   shelter: '<path d="m12 3 9 18H3L12 3Z"/><path d="M12 11v10M8 21l4-10 4 10"/><path d="M6.5 15h11"/>',
   turret: '<path d="M4 21h16M7 21l1-5h8l1 5"/><path d="M8 16v-3l4-3 4 3v3"/><path d="M12 10V6l5-2v5l-5 1Z"/><circle cx="12" cy="13" r="1.5"/>',
   beacon: '<path d="M12 21V8M8 21h8"/><path d="m12 8-3-3V2h6v3l-3 3Z"/><path d="M5 8a9 9 0 0 1-2-5M19 8a9 9 0 0 0 2-5M8 11a5 5 0 0 1-3-3M16 11a5 5 0 0 0 3-3"/>',

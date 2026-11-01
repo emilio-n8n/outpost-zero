@@ -41,10 +41,10 @@ export class Player {
   readonly position = new THREE.Vector3();
   readonly velocity = new THREE.Vector3();
   yaw = 0;
-  health = PLAYER.maxHealth;
-  hunger = 84;
-  stamina = PLAYER.maxStamina;
-  battery = 100;
+  health: number = PLAYER.maxHealth;
+  hunger: number = 84;
+  stamina: number = PLAYER.maxStamina;
+  battery: number = 100;
   flashlightOn = false;
   grounded = true;
   sprinting = false;

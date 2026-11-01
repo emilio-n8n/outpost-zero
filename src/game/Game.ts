@@ -106,10 +106,10 @@ export class Game {
   objectives: ObjectiveState = createObjectives();
   stats: SaveStats = emptyStats();
   seed = '';
-  clock = GAME.startClock;
-  day = 1;
-  playTime = 0;
-  fps = 60;
+  clock: number = GAME.startClock;
+  day: number = 1;
+  playTime: number = 0;
+  fps: number = 60;
   inventoryVersion = 0;
   state: GameState = 'loading';
   menuOpen = false;
