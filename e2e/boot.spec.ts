@@ -206,8 +206,12 @@ test.describe('OUTPOST ZERO', () => {
       await page.waitForTimeout(350);
       const state = await debugState(page);
       if (state.placement?.valid) {
+        const preview = state.placement;
         await page.screenshot({ path: testInfo.outputPath('13-build-preview.png') });
-        const result = await page.evaluate(() => window.__OUTPOST__?.tryPlace() ?? null);
+        const result = await page.evaluate(
+          (target) => window.__OUTPOST__?.tryPlaceAt(target.x, target.z) ?? null,
+          preview,
+        );
         expect(result?.ok).toBe(true);
         placed = true;
         break;

@@ -27,6 +27,7 @@ interface OutpostDebugApi {
   setPitch: (pitch: number) => void;
   setYaw: (yaw: number) => void;
   tryPlace: () => { ok: boolean; reason?: string; count?: number };
+  tryPlaceAt: (x: number, z: number) => { ok: boolean; reason?: string; count?: number };
   cancelBuild: () => void;
   spawnEnemy: (type: string, distance?: number) => void;
   melee: () => void;

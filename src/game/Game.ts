@@ -1920,6 +1920,25 @@ export class Game {
           count: this.world.structures.structures.length,
         };
       },
+      tryPlaceAt: (x: number, z: number) => {
+        if (!this.buildSystem.activeType) return { ok: false, reason: 'build-inactive' };
+        const type = this.buildSystem.activeType;
+        this.placement = {
+          type,
+          x,
+          z,
+          y: this.world.groundHeight(x, z),
+          rotation: this.buildSystem.rotation,
+          valid: true,
+          reason: null,
+        };
+        const before = this.world.structures.structures.length;
+        this.placeCurrentStructure();
+        return {
+          ok: this.world.structures.structures.length > before,
+          count: this.world.structures.structures.length,
+        };
+      },
       cancelBuild: () => this.cancelBuildMode(true),
       spawnEnemy: (type: EnemyType, distance = 2.4) => {
         if (!this.world) return;
