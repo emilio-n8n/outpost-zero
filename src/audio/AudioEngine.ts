@@ -204,6 +204,7 @@ export class AudioEngine {
     filterFrequency?: number,
   ): void {
     if (!this.ctx || !this.sfxGain) return;
+    try {
     const now = this.ctx.currentTime;
     const oscillator = this.ctx.createOscillator();
     oscillator.type = type;
@@ -225,6 +226,9 @@ export class AudioEngine {
     gain.connect(this.sfxGain);
     oscillator.start(now);
     oscillator.stop(now + duration + 0.03);
+    } catch {
+      // Audio must never interrupt gameplay or UI state changes.
+    }
   }
 
   private noise(
@@ -235,6 +239,7 @@ export class AudioEngine {
     q = 1,
   ): void {
     if (!this.ctx || !this.noiseBuffer || !this.sfxGain) return;
+    try {
     const now = this.ctx.currentTime;
     const source = this.ctx.createBufferSource();
     source.buffer = this.noiseBuffer;
@@ -251,6 +256,9 @@ export class AudioEngine {
     gain.connect(this.sfxGain);
     source.start(now);
     source.stop(now + duration + 0.03);
+    } catch {
+      // Ignore audio-node failures on suspended or closed contexts.
+    }
   }
 
   private birdChirp(): void {

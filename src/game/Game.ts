@@ -773,8 +773,12 @@ export class Game {
     if (saved) {
       this.lastSaveAt = Date.now();
       if (manual) {
-        this.audio.save();
         this.ui.toast('CHECKPOINT SYNCED', 'success');
+        try {
+          this.audio.save();
+        } catch {
+          // A closed audio context must not block a successful checkpoint.
+        }
       }
     } else if (manual) {
       this.ui.toast('CHECKPOINT WRITE FAILED', 'danger');

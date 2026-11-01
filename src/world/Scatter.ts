@@ -136,7 +136,7 @@ export class Scatter {
       flatShading: true,
       side: THREE.DoubleSide,
     });
-    this.grass = new THREE.InstancedMesh(this.grassGeometry, grassMaterial, 900);
+    this.grass = new THREE.InstancedMesh(this.grassGeometry, grassMaterial, 1120);
     this.grass.name = 'grass';
     let grassCount = 0;
     for (let attempt = 0; attempt < 3200 && grassCount < 900; attempt++) {
@@ -156,6 +156,26 @@ export class Scatter {
       matrix.compose(position, quaternion, scale);
       this.grass.setMatrixAt(grassCount, matrix);
       color.setHSL(rng.range(0.36, 0.5), rng.range(0.18, 0.42), rng.range(0.18, 0.34));
+      this.grass.setColorAt(grassCount, color);
+      grassCount++;
+    }
+    for (let attempt = 0; attempt < 240 && grassCount < 1120; attempt++) {
+      const angle = rng.range(0, Math.PI * 2);
+      const radius = rng.range(8.5, 23);
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      if (Math.hypot(x, z) < 8.5) continue;
+      if (Math.hypot(x - OUTPOST.beaconPad.x, z - OUTPOST.beaconPad.z) < 5.2) continue;
+      if (Math.hypot(x - 0, z - 9) < 5.2) continue;
+      if (terrain.slopeAt(x, z) > 0.2) continue;
+      const y = terrain.heightAt(x, z);
+      position.set(x, y, z);
+      quaternion.setFromEuler(new THREE.Euler(0, rng.range(0, Math.PI * 2), 0));
+      const s = rng.range(0.45, 1.15);
+      scale.set(s, s * rng.range(0.7, 1.3), s);
+      matrix.compose(position, quaternion, scale);
+      this.grass.setMatrixAt(grassCount, matrix);
+      color.setHSL(rng.range(0.34, 0.49), rng.range(0.18, 0.4), rng.range(0.2, 0.34));
       this.grass.setColorAt(grassCount, color);
       grassCount++;
     }

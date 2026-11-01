@@ -357,7 +357,6 @@ select:focus-visible {
     radial-gradient(ellipse at 12% 82%, rgba(4, 12, 15, 0.96) 0%, rgba(4, 12, 15, 0.55) 38%, transparent 68%),
     linear-gradient(90deg, rgba(3, 9, 12, 0.72), transparent 65%),
     linear-gradient(180deg, rgba(2, 7, 9, 0.32), transparent 24%, transparent 72%, rgba(2, 7, 9, 0.68));
-  animation: fadeIn 1.2s ease both;
 }
 
 .title-ambient {
@@ -660,7 +659,6 @@ select:focus-visible {
 
 .hud.is-visible {
   display: block;
-  animation: hudIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 @keyframes hudIn {
@@ -2025,17 +2023,14 @@ select:focus-visible {
     0 40px 100px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(180, 255, 245, 0.06);
   clip-path: polygon(0 0, calc(100% - 1.1rem) 0, 100% 1.1rem, 100% 100%, 1.1rem 100%, 0 calc(100% - 1.1rem));
-  animation: terminalIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 @keyframes terminalIn {
   from {
-    transform: translateY(10px) scale(0.992);
-    filter: blur(3px);
+    transform: translateY(8px);
   }
   to {
-    transform: translateY(0) scale(1);
-    filter: blur(0);
+    transform: translateY(0);
   }
 }
 
@@ -2999,7 +2994,6 @@ select:focus-visible {
   border: 1px solid rgba(130, 239, 223, 0.2);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 0 100%);
-  animation: terminalIn 0.3s ease both;
 }
 
 .pause-head {
@@ -3159,7 +3153,6 @@ select:focus-visible {
   border: 1px solid rgba(130, 239, 223, 0.2);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 0 100%);
-  animation: terminalIn 0.3s ease both;
   scrollbar-width: thin;
   scrollbar-color: rgba(130, 239, 223, 0.25) transparent;
 }
@@ -3443,7 +3436,6 @@ input[type='range']::-moz-range-thumb {
 .end-content {
   position: relative;
   width: min(60rem, 92vw);
-  animation: terminalIn 0.5s ease both;
 }
 
 .end-kicker {
