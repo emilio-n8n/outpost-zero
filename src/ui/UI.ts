@@ -323,7 +323,7 @@ export class UI {
         <div id="pause-screen" class="ui-screen pause-screen">
           <div class="pause-backdrop"></div>
           <div class="pause-shell">
-            <div class="pause-head"><span class="eyebrow"><span></span> SYSTEM HOLD</span><h2>PAUSED</h2><p>SUIT LINK STANDBY // ENVIRONMENT SIMULATION FROZEN</p></div>
+            <div class="pause-head"><span class="eyebrow"><span></span> SYSTEM HOLD</span><h2>PAUSED</h2><p>SUIT LINK STANDBY // ENVIRONMENT SIMULATION FROZEN</p><div class="save-status" id="save-status">AWAITING MANUAL CHECKPOINT</div></div>
             <div class="pause-body">
               <div class="pause-menu">
                 <button class="pause-item" data-action="resume" type="button"><span>01</span> RESUME SUIT LINK ${icon('arrow')}</button>
@@ -573,7 +573,12 @@ export class UI {
         value: '',
         at: Date.now(),
       };
-      this.game.saveGame(true);
+      const saved = this.game.saveGame(true);
+      const status = this.get('save-status');
+      status.classList.toggle('is-synced', saved);
+      status.textContent = saved
+        ? `CHECKPOINT SYNCED // ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+        : 'CHECKPOINT WRITE FAILED';
     });
   }
 
@@ -1030,7 +1035,7 @@ export class UI {
     window.setTimeout(() => {
       toast.classList.add('is-leaving');
       window.setTimeout(() => toast.remove(), 300);
-    }, 3200);
+    }, 5000);
   }
 
   damageFlash(): void {

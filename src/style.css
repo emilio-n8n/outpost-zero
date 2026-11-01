@@ -3020,6 +3020,23 @@ select:focus-visible {
   color: var(--faint);
 }
 
+.save-status {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.22rem 0.45rem;
+  border: 1px solid rgba(146, 224, 216, 0.14);
+  font-family: var(--font-display);
+  font-size: 0.46rem;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+}
+
+.save-status.is-synced {
+  border-color: rgba(130, 239, 223, 0.35);
+  color: var(--cyan);
+  background: rgba(130, 239, 223, 0.06);
+}
+
 .pause-body {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(14rem, 0.7fr);

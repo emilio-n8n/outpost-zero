@@ -82,10 +82,11 @@ test.describe('OUTPOST ZERO', () => {
     await expect.poll(async () => (await debugState(page)).pointerLocked).toBe(false);
     await page.waitForTimeout(650);
     await page.locator('#pause-save').click();
-    await page.waitForTimeout(300);
+    await expect(page.locator('#save-status')).toContainText('CHECKPOINT SYNCED', {
+      timeout: 5000,
+    });
     const saveState = await debugState(page);
-    console.log('SAVE DEBUG', JSON.stringify({ action: saveState.lastUiAction, attempt: saveState.lastSaveAttempt }));
-    await expect(page.locator('#toast-stack .toast')).toContainText('CHECKPOINT SYNCED');
+    expect(saveState.lastSaveAttempt?.result).toBe('ok');
     await page.screenshot({ path: testInfo.outputPath('05-pause.png') });
 
     const savedValue = await page.evaluate(() => window.localStorage.getItem('outpost-zero:save:v1'));
