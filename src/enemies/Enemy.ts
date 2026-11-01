@@ -150,7 +150,11 @@ export class Enemy {
 
   private buildModel(): void {
     const palette = PALETTES[this.type];
-    const carapace = this.mat(palette.carapace, { roughness: 0.78 });
+    const carapace = this.mat(palette.carapace, {
+      roughness: 0.78,
+      emissive: palette.carapace,
+      emissiveIntensity: 0.16,
+    });
     const belly = this.mat(palette.belly, { roughness: 0.82 });
     const accent = this.mat(palette.accent, { roughness: 0.7, metalness: 0.08 });
     const glowMaterial = this.mat(palette.glow, {
@@ -175,7 +179,7 @@ export class Enemy {
       this.addPart(this.headGroup, skull, carapace, [0, 1.14, 0.94], [0.08, 0, 0]);
       const jaw = this.track(new THREE.ConeGeometry(0.17, 0.36, 5));
       this.addPart(this.headGroup, jaw, belly, [0, 1.06, 1.3], [Math.PI * 0.5, 0, 0]);
-      const eyeGeo = this.track(new THREE.SphereGeometry(0.052, 6, 5));
+      const eyeGeo = this.track(new THREE.SphereGeometry(0.072, 6, 5));
       for (const x of [-0.115, 0.115]) {
         const eye = this.addPart(this.headGroup, eyeGeo, eyeMaterial, [x, 1.2, 1.18], [0, 0, 0], [1, 1, 0.5], false);
         this.eyes.push(eye);
@@ -233,7 +237,7 @@ export class Enemy {
       this.addPart(this.headGroup, head, carapace, [0, 1.95, 0.35], [0.12, 0, 0]);
       const jaw = this.track(new THREE.BoxGeometry(0.3, 0.18, 0.32));
       this.addPart(this.headGroup, jaw, belly, [0, 1.83, 0.55]);
-      const eyeGeo = this.track(new THREE.SphereGeometry(0.06, 6, 5));
+      const eyeGeo = this.track(new THREE.SphereGeometry(0.082, 6, 5));
       for (const x of [-0.13, 0.13]) {
         this.eyes.push(this.addPart(this.headGroup, eyeGeo, eyeMaterial, [x, 1.99, 0.58], [0, 0, 0], [1, 1, 0.6], false));
       }
@@ -274,7 +278,7 @@ export class Enemy {
       this.addPart(this.bodyGroup, neck, carapace, [0, 1.62, 0.1], [0.18, 0, 0]);
       const head = this.track(new THREE.ConeGeometry(0.22, 0.62, 6));
       this.addPart(this.headGroup, head, carapace, [0, 1.86, 0.3], [Math.PI * 0.5, 0, 0]);
-      const eyeGeo = this.track(new THREE.SphereGeometry(0.05, 6, 5));
+      const eyeGeo = this.track(new THREE.SphereGeometry(0.07, 6, 5));
       for (const x of [-0.1, 0.1]) {
         this.eyes.push(this.addPart(this.headGroup, eyeGeo, eyeMaterial, [x, 1.9, 0.57], [0, 0, 0], [1, 1, 0.6], false));
       }
@@ -307,7 +311,7 @@ export class Enemy {
       this.addPart(this.bodyGroup, chest, accent, [0, 1.95, 0.72], [0.08, 0, 0]);
       const head = this.track(new THREE.BoxGeometry(0.5, 0.42, 0.6));
       this.addPart(this.headGroup, head, carapace, [0, 2.55, 0.45], [0.12, 0, 0]);
-      const eyeGeo = this.track(new THREE.SphereGeometry(0.075, 6, 5));
+      const eyeGeo = this.track(new THREE.SphereGeometry(0.095, 6, 5));
       for (const x of [-0.16, 0.16]) {
         this.eyes.push(this.addPart(this.headGroup, eyeGeo, eyeMaterial, [x, 2.6, 0.72], [0, 0, 0], [1, 1, 0.6], false));
       }

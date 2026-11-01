@@ -1428,9 +1428,10 @@ export class UI {
     const seen = new Set<string>();
     for (const enemy of this.game.enemies.enemies) {
       if (!enemy.alive) continue;
-      if (!enemy.aggro && enemy.health >= enemy.maxHealth) continue;
       const distance = enemy.position.distanceTo(this.game.player.position);
       if (distance > 48) continue;
+      const shouldShow = enemy.aggro || enemy.health < enemy.maxHealth || (isNight(this.game.clock) && distance < 22);
+      if (!shouldShow) continue;
       const point = new THREE.Vector3(enemy.position.x, enemy.position.y + enemy.height + 0.28, enemy.position.z);
       point.project(camera);
       if (point.z < -1 || point.z > 1) continue;

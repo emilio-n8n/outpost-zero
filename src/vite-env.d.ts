@@ -30,6 +30,8 @@ interface OutpostDebugApi {
   cancelBuild: () => void;
   spawnEnemy: (type: string, distance?: number) => void;
   melee: () => void;
+  killPlayer: () => void;
+  triggerVictory: () => void;
   interact: () => void;
   openTerminal: (tab: 'inventory' | 'crafting' | 'build') => void;
   closeTerminal: () => void;

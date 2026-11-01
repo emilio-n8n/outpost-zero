@@ -1744,7 +1744,7 @@ select:focus-visible {
 
 .enemy-name {
   font-family: var(--font-display);
-  font-size: 0.42rem;
+  font-size: 0.5rem;
   letter-spacing: 0.11em;
   color: var(--danger);
   text-align: center;

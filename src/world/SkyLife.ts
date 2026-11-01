@@ -9,6 +9,7 @@ interface Drifter {
   bellMaterial: THREE.MeshBasicMaterial;
   coreMaterial: THREE.MeshBasicMaterial;
   tendrilMaterial: THREE.LineBasicMaterial;
+  rimMaterial: THREE.MeshBasicMaterial;
   baseX: number;
   baseZ: number;
   baseY: number;
@@ -27,6 +28,7 @@ export class SkyLife {
   private readonly rng = new Rng('outpost-zero-skylife');
   private readonly bellGeometry = new THREE.SphereGeometry(1, 8, 5, 0, Math.PI * 2, 0, Math.PI * 0.52);
   private readonly coreGeometry = new THREE.SphereGeometry(0.36, 7, 5);
+  private readonly rimGeometry = new THREE.TorusGeometry(1, 0.035, 5, 24);
   private readonly tendrilGeometry: THREE.BufferGeometry;
 
   constructor(scene: THREE.Scene) {
@@ -49,14 +51,13 @@ export class SkyLife {
         color,
         transparent: true,
         opacity: 0,
-        blending: THREE.AdditiveBlending,
         depthWrite: false,
         side: THREE.DoubleSide,
         fog: false,
         toneMapped: false,
       });
       const bell = new THREE.Mesh(this.bellGeometry, bellMaterial);
-      bell.scale.set(this.rng.range(1.35, 3.0), this.rng.range(0.8, 1.5), this.rng.range(1.35, 3.0));
+      bell.scale.set(this.rng.range(1.05, 2.15), this.rng.range(0.7, 1.25), this.rng.range(1.05, 2.15));
       group.add(bell);
 
       const coreMaterial = new THREE.MeshBasicMaterial({
@@ -70,7 +71,7 @@ export class SkyLife {
       });
       const core = new THREE.Mesh(this.coreGeometry, coreMaterial);
       core.position.y = -0.18;
-      core.scale.setScalar(this.rng.range(1.1, 2.0));
+      core.scale.setScalar(this.rng.range(0.75, 1.35));
       group.add(core);
 
       const tendrilMaterial = new THREE.LineBasicMaterial({
@@ -84,6 +85,18 @@ export class SkyLife {
       });
       const tendrils = new THREE.LineSegments(this.tendrilGeometry, tendrilMaterial);
       group.add(tendrils);
+      const rimMaterial = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        fog: false,
+        toneMapped: false,
+      });
+      const rim = new THREE.Mesh(this.rimGeometry, rimMaterial);
+      rim.rotation.x = Math.PI / 2;
+      group.add(rim);
 
       const angle = this.rng.range(0, Math.PI * 2);
       const radius = this.rng.range(18, 62);
@@ -91,17 +104,17 @@ export class SkyLife {
       let baseZ = Math.sin(angle) * radius;
       let baseY = this.rng.range(8, 20);
       if (i === 0) {
-        baseX = -2;
+        baseX = -24;
         baseZ = -8;
-        baseY = 14;
+        baseY = 15;
       } else if (i === 1) {
-        baseX = 24;
+        baseX = 28;
         baseZ = 2;
-        baseY = 16;
+        baseY = 17;
       } else if (i === 2) {
-        baseX = 12;
-        baseZ = 33;
-        baseY = 18;
+        baseX = 18;
+        baseZ = 34;
+        baseY = 19;
       }
       group.position.set(baseX, baseY, baseZ);
       group.rotation.y = this.rng.range(0, Math.PI * 2);
@@ -114,6 +127,7 @@ export class SkyLife {
         bellMaterial,
         coreMaterial,
         tendrilMaterial,
+        rimMaterial,
         baseX,
         baseZ,
         baseY,
@@ -137,9 +151,10 @@ export class SkyLife {
       );
       drifter.group.rotation.y = t * 0.22;
       const pulse = 0.72 + Math.sin(t * 2.2) * 0.16;
-      drifter.bellMaterial.opacity = visibility * 0.46 * pulse;
-      drifter.coreMaterial.opacity = visibility * 0.95 * pulse;
-      drifter.tendrilMaterial.opacity = visibility * 0.28 * pulse;
+      drifter.bellMaterial.opacity = visibility * 0.3 * pulse;
+      drifter.coreMaterial.opacity = visibility * 0.85 * pulse;
+      drifter.tendrilMaterial.opacity = visibility * 0.52 * pulse;
+      drifter.rimMaterial.opacity = visibility * 0.6 * pulse;
       drifter.bell.rotation.z = Math.sin(t * 0.4) * 0.06;
       drifter.tendrils.rotation.z = Math.sin(t * 0.5) * 0.08;
     }
@@ -151,9 +166,11 @@ export class SkyLife {
       drifter.bellMaterial.dispose();
       drifter.coreMaterial.dispose();
       drifter.tendrilMaterial.dispose();
+      drifter.rimMaterial.dispose();
     }
     this.bellGeometry.dispose();
     this.coreGeometry.dispose();
+    this.rimGeometry.dispose();
     this.tendrilGeometry.dispose();
   }
 }

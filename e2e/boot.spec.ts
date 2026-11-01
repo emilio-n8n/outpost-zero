@@ -229,4 +229,35 @@ test.describe('OUTPOST ZERO', () => {
 
     expect(pageErrors).toEqual([]);
   });
+
+  test('settings, field manual, death and extraction screens', async ({ page }, testInfo) => {
+    const pageErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+
+    await page.goto('/');
+    await expect(page.locator('#title-screen')).toBeVisible({ timeout: 90_000 });
+    await page.locator('[data-action="settings"][data-context="title"]').click();
+    await expect(page.locator('#settings-screen')).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('14-settings.png') });
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#settings-screen')).not.toBeVisible();
+
+    await page.locator('[data-action="help"][data-context="title"]').click();
+    await expect(page.locator('#help-screen')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#help-screen')).not.toBeVisible();
+
+    await page.locator('#btn-new-game').click();
+    await waitForPlaying(page);
+    await page.evaluate(() => window.__OUTPOST__?.killPlayer());
+    await expect(page.locator('#death-screen')).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('15-death.png') });
+    await page.locator('[data-action="respawn"]').click();
+    await waitForPlaying(page);
+    await page.evaluate(() => window.__OUTPOST__?.triggerVictory());
+    await expect(page.locator('#victory-screen')).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('16-victory.png') });
+
+    expect(pageErrors).toEqual([]);
+  });
 });

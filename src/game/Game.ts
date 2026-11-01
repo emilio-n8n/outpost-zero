@@ -1898,16 +1898,18 @@ export class Game {
       },
       tryPlace: () => {
         if (!this.buildSystem.activeType) return { ok: false, reason: 'build-inactive' };
-        this.placement = this.buildSystem.update(
-          this.camera,
-          this.player.position,
-          PLAYER.radius,
-          this.world,
-          this.world.structures,
-          this.inventory,
-          this.objectives.blueprints,
-          12,
-        );
+        if (!this.placement) {
+          this.placement = this.buildSystem.update(
+            this.camera,
+            this.player.position,
+            PLAYER.radius,
+            this.world,
+            this.world.structures,
+            this.inventory,
+            this.objectives.blueprints,
+            12,
+          );
+        }
         if (!this.placement || !this.placement.valid) {
           return { ok: false, reason: this.placement?.reason ?? 'no-placement' };
         }
@@ -1924,11 +1926,25 @@ export class Game {
         const yaw = this.cameraRig?.yaw ?? this.player.yaw;
         const x = this.player.position.x + Math.sin(yaw) * distance;
         const z = this.player.position.z + Math.cos(yaw) * distance;
-        this.enemies.spawn(type, new THREE.Vector3(x, this.world.groundHeight(x, z), z), Math.max(1, this.nightDirector.nightNumber));
+        const enemy = this.enemies.spawn(
+          type,
+          new THREE.Vector3(x, this.world.groundHeight(x, z), z),
+          Math.max(1, this.nightDirector.nightNumber),
+        );
+        enemy.yaw = Math.atan2(this.player.position.x - x, this.player.position.z - z);
+        enemy.group.rotation.y = enemy.yaw;
       },
       melee: () => {
         this.weaponCooldown = 0;
         this.attackMelee();
+      },
+      killPlayer: () => {
+        if (this.state !== 'playing') return;
+        this.player.health = 1;
+        this.handleDeath('Diagnostic suit failure');
+      },
+      triggerVictory: () => {
+        if (this.state === 'playing') this.handleVictory();
       },
       nearestNodeOfType: (type: ResourceId) => {
         let best: { id: string; type: ResourceId; x: number; z: number } | null = null;
@@ -1978,7 +1994,13 @@ export class Game {
       const z = this.player.position.z + Math.sin(angle) * radius;
       const y = this.world.groundHeight(x, z);
       const type = chooseEnemyType(3, Math.random());
-      this.enemies.spawn(type, new THREE.Vector3(x, y, z), Math.max(1, this.nightDirector.nightNumber));
+      const enemy = this.enemies.spawn(
+        type,
+        new THREE.Vector3(x, y, z),
+        Math.max(1, this.nightDirector.nightNumber),
+      );
+      enemy.yaw = Math.atan2(this.player.position.x - x, this.player.position.z - z);
+      enemy.group.rotation.y = enemy.yaw;
     }
     this.ui.toast('DEBUG WAVE MATERIALIZED', 'info');
   }
