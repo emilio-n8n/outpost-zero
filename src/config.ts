@@ -34,7 +34,7 @@ export const OUTPOST = {
   z: 0,
   flattenRadius: 24,
   beaconPad: { x: 6.5, z: -2.5, radius: 3.8 },
-  playerSpawn: { x: -6.5, z: 16.5 },
+  playerSpawn: { x: 10.5, z: 16.0 },
 } as const;
 
 export const SITES: readonly SiteConfig[] = [

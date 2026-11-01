@@ -194,11 +194,11 @@ export class World {
     );
     this.moon.target.position.copy(playerPosition);
     this.moon.target.updateMatrixWorld();
-    this.moon.intensity = night * 0.5;
-    this.hemisphere.intensity = 0.46 + daylight(clock) * 1.1;
+    this.moon.intensity = night * 0.9;
+    this.hemisphere.intensity = 0.52 + daylight(clock) * 1.05;
     this.hemisphere.color.setHex(palette.horizon);
     this.hemisphere.groundColor.setHex(0x1a1712);
-    this.ambient.intensity = 0.3 + daylight(clock) * 0.24;
+    this.ambient.intensity = 0.36 + daylight(clock) * 0.2;
     this.fog.color.setHex(palette.fog);
     this.fog.density = lerp(0.0105, 0.0175, night) + (1 - Math.abs(sunY) * 4) * 0.0007;
 

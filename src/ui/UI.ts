@@ -131,6 +131,7 @@ export class UI {
     this.minimapCanvas = this.get<HTMLCanvasElement>('minimap');
     this.minimapContext = this.minimapCanvas.getContext('2d');
     this.bindEvents();
+    this.bindCriticalActions();
     this.bindSettings();
     this.startLoadingTips();
   }
@@ -473,6 +474,11 @@ export class UI {
       const action = actionEl.dataset.action;
       const value = actionEl.dataset.value ?? '';
       if (!action) return;
+      (window as unknown as { __OUTPOST_UI_ACTION__?: unknown }).__OUTPOST_UI_ACTION__ = {
+        action,
+        value,
+        at: Date.now(),
+      };
       if (action !== 'settings-reset') this.game.audio.uiClick();
       switch (action) {
         case 'new-game':
@@ -556,6 +562,19 @@ export class UI {
       },
       true,
     );
+  }
+
+  private bindCriticalActions(): void {
+    this.get('pause-save').addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      (window as unknown as { __OUTPOST_UI_ACTION__?: unknown }).__OUTPOST_UI_ACTION__ = {
+        action: 'save',
+        value: '',
+        at: Date.now(),
+      };
+      this.game.saveGame(true);
+    });
   }
 
   private bindSettings(): void {

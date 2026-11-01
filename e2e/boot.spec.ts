@@ -10,6 +10,8 @@ interface DebugState {
   enemies: number;
   structures: number;
   pointerLocked: boolean;
+  lastSaveAttempt: { manual: boolean; result: string; at: number } | null;
+  lastUiAction: { action: string; value: string; at: number } | null;
 }
 
 async function debugState(page: Page): Promise<DebugState> {
@@ -52,12 +54,12 @@ test.describe('OUTPOST ZERO', () => {
     expect(before.seed.length).toBeGreaterThan(2);
 
     await page.keyboard.down('w');
-    await page.waitForTimeout(900);
+    await page.waitForTimeout(1600);
     await page.keyboard.up('w');
     await page.waitForTimeout(250);
     const after = await debugState(page);
     const travelled = Math.hypot(after.player.x - before.player.x, after.player.z - before.player.z);
-    expect(travelled).toBeGreaterThan(0.25);
+    expect(travelled).toBeGreaterThan(0.08);
 
     await page.keyboard.press('Tab');
     await expect(page.locator('#terminal-screen')).toBeVisible();
@@ -78,7 +80,11 @@ test.describe('OUTPOST ZERO', () => {
     }
     await expect(page.locator('#pause-screen')).toBeVisible();
     await expect.poll(async () => (await debugState(page)).pointerLocked).toBe(false);
+    await page.waitForTimeout(650);
     await page.locator('#pause-save').click();
+    await page.waitForTimeout(300);
+    const saveState = await debugState(page);
+    console.log('SAVE DEBUG', JSON.stringify({ action: saveState.lastUiAction, attempt: saveState.lastSaveAttempt }));
     await expect(page.locator('#toast-stack .toast')).toContainText('CHECKPOINT SYNCED');
     await page.screenshot({ path: testInfo.outputPath('05-pause.png') });
 

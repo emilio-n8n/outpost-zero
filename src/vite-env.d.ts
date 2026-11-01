@@ -11,6 +11,8 @@ interface OutpostDebugApi {
     enemies: number;
     structures: number;
     pointerLocked: boolean;
+    lastSaveAttempt: { manual: boolean; result: string; at: number } | null;
+    lastUiAction: { action: string; value: string; at: number } | null;
   };
   setTime: (clock: number) => void;
   enterNight: () => void;

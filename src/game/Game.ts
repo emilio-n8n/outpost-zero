@@ -118,6 +118,7 @@ export class Game {
   siege: SiegeState = { active: false, progress: 0, inRange: false, timeLeft: SIEGE.duration };
   deathCause = 'Suit failure';
   showFps = false;
+  lastSaveAttempt: { manual: boolean; result: string; at: number } | null = null;
 
   private readonly app: HTMLElement;
   private elapsedTime = 0;
@@ -310,7 +311,7 @@ export class Game {
       this.inventory = createInventory();
       this.objectives = createObjectives();
       this.stats = emptyStats();
-      this.clock = mode === 'title' ? 0.755 : GAME.startClock;
+      this.clock = mode === 'title' ? 0.735 : GAME.startClock;
       this.day = 1;
       this.playTime = 0;
       this.inventoryVersion++;
@@ -467,7 +468,7 @@ export class Game {
       const yaw = Math.atan2(OUTPOST.x - spawn.x, OUTPOST.z - spawn.z);
       this.player.reset(spawn, yaw);
       this.player.group.rotation.y = yaw;
-      this.clock = 0.755;
+      this.clock = 0.735;
       this.day = Math.max(1, this.day);
       if (this.cameraRig) {
         this.cameraRig.yaw = yaw;
@@ -718,9 +719,17 @@ export class Game {
   }
 
   saveGame(manual = true): boolean {
-    if (!this.world || !this.player) return false;
-    if (this.state === 'loading' || this.state === 'dead' || this.state === 'victory') return false;
+    this.lastSaveAttempt = { manual, result: 'attempt', at: Date.now() };
+    if (!this.world || !this.player) {
+      this.lastSaveAttempt.result = 'no-run';
+      return false;
+    }
+    if (this.state === 'loading' || this.state === 'dead' || this.state === 'victory') {
+      this.lastSaveAttempt.result = 'invalid-state';
+      return false;
+    }
     if (this.siege.active) {
+      this.lastSaveAttempt.result = 'siege';
       if (manual) this.notice('UPLINK ACTIVE — CHECKPOINT LOCKED', 'warning');
       return false;
     }
@@ -760,6 +769,7 @@ export class Game {
     };
     const saved = writeJson(GAME.saveKey, save);
     this.autosaveTimer = 0;
+    this.lastSaveAttempt.result = saved ? 'ok' : 'write-failed';
     if (saved) {
       this.lastSaveAt = Date.now();
       if (manual) {
@@ -1243,14 +1253,9 @@ export class Game {
   private updateTitle(dt: number): void {
     if (!this.world || !this.player) return;
     this.titleAngle += dt * 0.06;
-    const radius = 23;
-    const angle = 1.62 + Math.sin(this.titleAngle * 0.25) * 0.1;
-    this.camera.position.set(
-      Math.cos(angle) * radius,
-      8.4 + Math.sin(this.titleAngle * 0.4) * 0.12,
-      5 + Math.sin(angle) * radius,
-    );
-    this.camera.lookAt(-5, 4.1, 3.5);
+    const drift = Math.sin(this.titleAngle * 0.18) * 0.8;
+    this.camera.position.set(2 + drift, 8.8 + Math.sin(this.titleAngle * 0.3) * 0.1, 23);
+    this.camera.lookAt(-9, 4.2, 7);
     if (Math.abs(this.camera.fov - 55) > 0.01) {
       this.camera.fov = 55;
       this.camera.updateProjectionMatrix();
@@ -1827,6 +1832,8 @@ export class Game {
         enemies: this.enemies.enemies.filter((enemy) => enemy.alive).length,
         structures: this.world.structures.structures.length,
         pointerLocked: this.input.isPointerLocked(),
+        lastSaveAttempt: this.lastSaveAttempt,
+        lastUiAction: (window as unknown as { __OUTPOST_UI_ACTION__?: unknown }).__OUTPOST_UI_ACTION__ ?? null,
       }),
       setTime: (clock: number) => {
         if (!this.world) return;
