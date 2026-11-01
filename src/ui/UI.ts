@@ -332,7 +332,7 @@ export class UI {
                 <button class="pause-item" id="pause-load" data-action="load" type="button"><span>03</span> LOAD CHECKPOINT</button>
                 <button class="pause-item" data-action="settings" data-context="pause" type="button"><span>04</span> SETTINGS ${icon('menu')}</button>
                 <button class="pause-item" data-action="help" data-context="pause" type="button"><span>05</span> FIELD MANUAL</button>
-                <button class="pause-item is-danger" data-action="quit" type="button"><span>06</span> ABANDON EXPEDITION ${icon('close')}</button>
+                <button class="pause-item is-danger" data-action="quit" type="button"><span>06</span> SAVE &amp; RETURN TO TITLE ${icon('close')}</button>
               </div>
               <aside class="pause-telemetry">
                 <span>RUN TELEMETRY</span>

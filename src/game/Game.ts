@@ -393,8 +393,8 @@ export class Game {
       this.world.structures.create(structure.type, structure.x, structure.z, structure.rotation, structure);
     }
     this.world.resources.applyCooldowns(save.nodeCooldowns);
-    this.objectives.beaconPlaced =
-      this.objectives.beaconPlaced || this.world.structures.getBeacon() !== null;
+    this.objectives.beaconPlaced = this.world.structures.getBeacon() !== null;
+    this.objectives.beaconActivated = false;
     this.objectives.nightsSurvived = Math.max(
       this.objectives.nightsSurvived,
       this.stats.nightsSurvived,
@@ -878,6 +878,8 @@ export class Game {
     if (this.state !== 'playing') return;
     this.state = 'victory';
     this.siege = { active: false, progress: 1, inRange: true, timeLeft: 0 };
+    this.cancelBuildMode(true);
+    this.clearInteraction();
     this.enemies.clearAll(true);
     this.releasePointer();
     this.ui.hideHud();
@@ -897,6 +899,8 @@ export class Game {
     this.deathCause = cause;
     this.stats.deaths += 1;
     this.player.health = 0;
+    this.cancelBuildMode(true);
+    this.clearInteraction();
     this.nightDirector.abortSiege();
     this.siege.active = false;
     this.releasePointer();

@@ -55,9 +55,11 @@ capture the mouse. Audio is synthesized on the fly and starts after your first i
 | --- | --- |
 | ![Daylight at Outpost Zero](docs/screenshots/daylight.png) | ![Nightfall with hostile creatures](docs/screenshots/nightfall.png) |
 
-| Field terminal | Settings |
+| Field terminal | Construction link |
 | --- | --- |
-| ![Field terminal crafting view](docs/screenshots/crafting.png) | ![Settings screen](docs/screenshots/settings.png) |
+| ![Field terminal crafting view](docs/screenshots/crafting.png) | ![Campfire build preview with beacon marker](docs/screenshots/construction.png) |
+
+Quality presets, audio levels and controls live in the settings screen.
 
 ## Controls
 
