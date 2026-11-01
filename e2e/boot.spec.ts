@@ -129,6 +129,14 @@ test.describe('OUTPOST ZERO', () => {
     await page.screenshot({ path: testInfo.outputPath('08-nightfall.png') });
 
     await page.evaluate(() => {
+      window.__OUTPOST__?.setTime(0.805);
+      window.__OUTPOST__?.spawnEnemy('stalker', 1.7);
+    });
+    await expect
+      .poll(async () => (await debugState(page)).player.health, { timeout: 20_000 })
+      .toBeLessThan(100);
+
+    await page.evaluate(() => {
       window.__OUTPOST__?.giveResources({ wood: 40, metal: 30, energy: 20, food: 10 });
       window.__OUTPOST__?.openTerminal('build');
     });
