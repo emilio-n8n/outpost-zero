@@ -15,7 +15,7 @@ export const GAME = {
   saveKey: 'outpost-zero:save:v1',
   settingsKey: 'outpost-zero:settings:v1',
   cycleSeconds: 480,
-  startClock: 0.29,
+  startClock: 0.315,
   nightStart: 0.78,
   nightEnd: 0.235,
   autosaveInterval: 60,
@@ -34,7 +34,7 @@ export const OUTPOST = {
   z: 0,
   flattenRadius: 24,
   beaconPad: { x: 6.5, z: -2.5, radius: 3.8 },
-  playerSpawn: { x: -5.5, z: 7.5 },
+  playerSpawn: { x: -6.5, z: 16.5 },
 } as const;
 
 export const SITES: readonly SiteConfig[] = [

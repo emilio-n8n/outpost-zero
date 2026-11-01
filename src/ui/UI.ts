@@ -145,7 +145,7 @@ export class UI {
     ).join('');
     return `
       <div id="ui-root">
-        <div id="loading-screen" class="ui-screen is-visible">
+        <div id="loading-screen" class="ui-screen loading-screen is-visible">
           <div class="loading-noise"></div>
           <div class="loading-shell">
             <div class="loading-kicker">DEEP RANGE SURVIVAL PROTOCOL // LINK ${pad(0, 4)}</div>
@@ -160,7 +160,7 @@ export class UI {
           <div class="loading-corner bottom-right">BUILD 1.0.0</div>
         </div>
 
-        <div id="title-screen" class="ui-screen">
+        <div id="title-screen" class="ui-screen title-screen">
           <div class="title-ambient"></div>
           <div class="title-topline">
             <span><i class="status-dot"></i> DEEP RANGE // SURVIVAL PROTOCOL</span>

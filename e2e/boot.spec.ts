@@ -62,7 +62,7 @@ test.describe('OUTPOST ZERO', () => {
     await page.keyboard.press('Tab');
     await expect(page.locator('#terminal-screen')).toBeVisible();
     await expect(page.locator('[data-testid="tab-inventory"]')).toHaveClass(/is-active/);
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(700);
     await page.screenshot({ path: testInfo.outputPath('03-inventory.png') });
 
     await page.keyboard.press('c');
@@ -77,6 +77,7 @@ test.describe('OUTPOST ZERO', () => {
       await page.keyboard.press('Escape');
     }
     await expect(page.locator('#pause-screen')).toBeVisible();
+    await expect.poll(async () => (await debugState(page)).pointerLocked).toBe(false);
     await page.locator('#pause-save').click();
     await expect(page.locator('#toast-stack .toast')).toContainText('CHECKPOINT SYNCED');
     await page.screenshot({ path: testInfo.outputPath('05-pause.png') });

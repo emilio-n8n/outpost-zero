@@ -185,7 +185,7 @@ export class World {
     );
     this.sun.target.position.copy(playerPosition);
     this.sun.target.updateMatrixWorld();
-    this.sun.intensity = 0.15 + daylight(clock) * 3.15;
+    this.sun.intensity = 0.35 + daylight(clock) * 3.5;
     this.sun.color.setHex(palette.sun);
     this.moon.position.set(
       playerPosition.x + moonDir.x * 55,
@@ -195,12 +195,12 @@ export class World {
     this.moon.target.position.copy(playerPosition);
     this.moon.target.updateMatrixWorld();
     this.moon.intensity = night * 0.5;
-    this.hemisphere.intensity = 0.32 + daylight(clock) * 0.95;
+    this.hemisphere.intensity = 0.46 + daylight(clock) * 1.1;
     this.hemisphere.color.setHex(palette.horizon);
     this.hemisphere.groundColor.setHex(0x1a1712);
-    this.ambient.intensity = 0.23 + daylight(clock) * 0.2;
+    this.ambient.intensity = 0.3 + daylight(clock) * 0.24;
     this.fog.color.setHex(palette.fog);
-    this.fog.density = lerp(0.0125, 0.019, night) + (1 - Math.abs(sunY) * 4) * 0.0008;
+    this.fog.density = lerp(0.0105, 0.0175, night) + (1 - Math.abs(sunY) * 4) * 0.0007;
 
     this.motes.rotation.y = this.elapsed * 0.004;
     this.motes.position.y = Math.sin(this.elapsed * 0.12) * 0.5;

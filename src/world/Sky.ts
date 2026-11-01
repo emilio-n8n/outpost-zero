@@ -249,10 +249,10 @@ export class Sky {
     this.group.add(farStars);
 
     this.planet = new THREE.Group();
-    this.planet.position.set(-240, 142, -330);
+    this.planet.position.set(-220, 82, -335);
     this.planet.renderOrder = -99;
     const planetMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(37, 40, 28),
+      new THREE.SphereGeometry(42, 40, 28),
       new THREE.MeshBasicMaterial({
         map: makePlanetTexture(),
         fog: false,
@@ -262,7 +262,7 @@ export class Sky {
     this.planet.add(planetMesh);
 
     const rings = new THREE.Mesh(
-      new THREE.RingGeometry(50, 72, 96),
+      new THREE.RingGeometry(56, 80, 96),
       new THREE.MeshBasicMaterial({
         color: 0xc9aa8d,
         transparent: true,
@@ -277,7 +277,7 @@ export class Sky {
     this.planet.add(rings);
 
     const ringDust = new THREE.Mesh(
-      new THREE.RingGeometry(45, 78, 96),
+      new THREE.RingGeometry(51, 86, 96),
       new THREE.MeshBasicMaterial({
         color: 0x9f8b7d,
         transparent: true,
@@ -301,7 +301,7 @@ export class Sky {
         toneMapped: false,
       }),
     );
-    this.glowSprite.scale.set(150, 150, 1);
+    this.glowSprite.scale.set(170, 170, 1);
     this.glowSprite.position.copy(this.planet.position);
     this.glowSprite.renderOrder = -100;
     this.group.add(this.glowSprite);

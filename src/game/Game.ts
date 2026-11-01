@@ -158,9 +158,9 @@ export class Game {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.06;
+    this.renderer.toneMappingExposure = 1.18;
     this.renderer.shadowMap.enabled = QUALITY[this.settings.quality].shadows;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     app.appendChild(this.renderer.domElement);
 
     this.scene = new THREE.Scene();
@@ -310,7 +310,7 @@ export class Game {
       this.inventory = createInventory();
       this.objectives = createObjectives();
       this.stats = emptyStats();
-      this.clock = mode === 'title' ? 0.805 : GAME.startClock;
+      this.clock = mode === 'title' ? 0.755 : GAME.startClock;
       this.day = 1;
       this.playTime = 0;
       this.inventoryVersion++;
@@ -467,7 +467,7 @@ export class Game {
       const yaw = Math.atan2(OUTPOST.x - spawn.x, OUTPOST.z - spawn.z);
       this.player.reset(spawn, yaw);
       this.player.group.rotation.y = yaw;
-      this.clock = 0.805;
+      this.clock = 0.755;
       this.day = Math.max(1, this.day);
       if (this.cameraRig) {
         this.cameraRig.yaw = yaw;
@@ -475,9 +475,9 @@ export class Game {
       }
       this.nightDirector.syncClock(this.clock);
     }
-    this.camera.fov = 50;
+    this.camera.fov = 55;
     this.camera.updateProjectionMatrix();
-    this.titleAngle = initial ? 0.9 : this.titleAngle;
+    this.titleAngle = initial ? 0 : this.titleAngle;
     this.currentInteraction = null;
     this.placement = null;
     this.ui.resetCaches();
@@ -949,12 +949,23 @@ export class Game {
     this.suppressPointerLoss = true;
     this.input?.exitPointerLock();
     window.setTimeout(() => {
+      this.input?.exitPointerLock();
+    }, 60);
+    window.setTimeout(() => {
+      this.input?.exitPointerLock();
+    }, 160);
+    window.setTimeout(() => {
       this.suppressPointerLoss = false;
-    }, 260);
+    }, 320);
   }
 
   private onPointerLockChanged(locked: boolean): void {
-    if (locked) return;
+    if (locked) {
+      if (this.state !== 'playing' || this.menuOpen) {
+        this.input.exitPointerLock();
+      }
+      return;
+    }
     if (
       this.state === 'playing' &&
       !this.menuOpen &&
@@ -1231,21 +1242,22 @@ export class Game {
 
   private updateTitle(dt: number): void {
     if (!this.world || !this.player) return;
-    this.titleAngle += dt * 0.025;
-    const radius = 26;
+    this.titleAngle += dt * 0.06;
+    const radius = 23;
+    const angle = 1.62 + Math.sin(this.titleAngle * 0.25) * 0.1;
     this.camera.position.set(
-      Math.cos(this.titleAngle) * radius,
-      10.8 + Math.sin(this.titleAngle * 0.7) * 1.4,
-      4 + Math.sin(this.titleAngle) * radius,
+      Math.cos(angle) * radius,
+      8.4 + Math.sin(this.titleAngle * 0.4) * 0.12,
+      5 + Math.sin(angle) * radius,
     );
-    this.camera.lookAt(0, 2.8, 4.2);
-    if (Math.abs(this.camera.fov - 50) > 0.01) {
-      this.camera.fov = 50;
+    this.camera.lookAt(-5, 4.1, 3.5);
+    if (Math.abs(this.camera.fov - 55) > 0.01) {
+      this.camera.fov = 55;
       this.camera.updateProjectionMatrix();
     }
-    this.world.update(dt, 0.805, this.camera, this.player.position, this.fx, false);
+    this.world.update(dt, this.clock, this.camera, this.player.position, this.fx, false);
     this.player.updateVisuals(dt, this.elapsedTime, this.cameraRig);
-    this.audio.update(dt, nightStrength(0.805), false, false);
+    this.audio.update(dt, nightStrength(this.clock), false, false);
   }
 
   private updatePassive(dt: number): void {
