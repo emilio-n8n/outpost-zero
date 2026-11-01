@@ -207,7 +207,7 @@ test.describe('OUTPOST ZERO', () => {
     await expect(page.locator('#build-hud')).toHaveClass(/is-visible/, { timeout: 10_000 });
     await page.evaluate(() => {
       window.__OUTPOST__?.teleport(0, 14);
-      window.__OUTPOST__?.setYaw(0);
+      window.__OUTPOST__?.setYaw(Math.PI / 2);
     });
     let placed = false;
     for (const pitch of [-0.2, -0.28, -0.35, -0.42, -0.15, -0.5]) {
@@ -254,6 +254,11 @@ test.describe('OUTPOST ZERO', () => {
     await page.locator('[data-action="settings"][data-context="title"]').click();
     await expect(page.locator('#settings-screen')).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath('14-settings.png') });
+    await page.selectOption('#setting-quality', 'low');
+    await page.waitForTimeout(700);
+    await page.screenshot({ path: testInfo.outputPath('14b-settings-low.png') });
+    await page.selectOption('#setting-quality', 'medium');
+    await page.waitForTimeout(300);
     await page.keyboard.press('Escape');
     await expect(page.locator('#settings-screen')).not.toBeVisible();
 
