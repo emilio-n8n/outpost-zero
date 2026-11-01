@@ -22,6 +22,8 @@ export class BuildSystem {
   private readonly terrain: Terrain;
   private ghost: THREE.Group | null = null;
   private ghostMaterials: THREE.MeshBasicMaterial[] = [];
+  private ghostEdgeMaterial: THREE.LineBasicMaterial | null = null;
+  private ghostMarkerMaterial: THREE.MeshBasicMaterial | null = null;
   private raycaster = new THREE.Raycaster();
   private center = new THREE.Vector2(0, 0);
   private current: PlacementInfo | null = null;
@@ -37,7 +39,36 @@ export class BuildSystem {
     this.rotation = 0;
     this.ghost = new THREE.Group();
     this.ghost.name = 'build-ghost';
+    this.ghostEdgeMaterial = new THREE.LineBasicMaterial({
+      color: 0x7dffe7,
+      transparent: true,
+      opacity: 0.75,
+      depthWrite: false,
+      toneMapped: false,
+    });
+    this.ghostMarkerMaterial = new THREE.MeshBasicMaterial({
+      color: 0x7dffe7,
+      transparent: true,
+      opacity: 0.58,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+    });
     this.createGhostGeometry(type);
+    const beam = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.025, 0.025, 3.2, 6),
+      this.ghostMarkerMaterial,
+    );
+    beam.position.y = 1.6;
+    beam.renderOrder = 6;
+    this.ghost.add(beam);
+    const beacon = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.14, 0),
+      this.ghostMarkerMaterial,
+    );
+    beacon.position.y = 3.25;
+    beacon.renderOrder = 6;
+    this.ghost.add(beacon);
     this.scene.add(this.ghost);
   }
 
@@ -57,6 +88,14 @@ export class BuildSystem {
     mesh.rotation.y = ry;
     mesh.renderOrder = 5;
     this.ghost.add(mesh);
+    if (this.ghostEdgeMaterial) {
+      const edges = new THREE.EdgesGeometry(geometry);
+      const outline = new THREE.LineSegments(edges, this.ghostEdgeMaterial);
+      outline.position.copy(mesh.position);
+      outline.rotation.copy(mesh.rotation);
+      outline.renderOrder = 6;
+      this.ghost.add(outline);
+    }
   }
 
   private createGhostGeometry(type: BuildType): void {
@@ -101,12 +140,18 @@ export class BuildSystem {
     if (this.ghost) {
       this.scene.remove(this.ghost);
       this.ghost.traverse((child) => {
-        if (child instanceof THREE.Mesh) child.geometry.dispose();
+        if (child instanceof THREE.Mesh || child instanceof THREE.LineSegments) {
+          child.geometry.dispose();
+        }
       });
       this.ghost = null;
     }
     for (const material of this.ghostMaterials) material.dispose();
     this.ghostMaterials = [];
+    this.ghostEdgeMaterial?.dispose();
+    this.ghostEdgeMaterial = null;
+    this.ghostMarkerMaterial?.dispose();
+    this.ghostMarkerMaterial = null;
   }
 
   rotate(): void {
@@ -188,8 +233,11 @@ export class BuildSystem {
     const color = valid ? 0x7dffe7 : 0xff6255;
     for (const material of this.ghostMaterials) {
       material.color.setHex(color);
-      material.opacity = valid ? 0.25 : 0.3;
+      material.opacity = valid ? 0.32 : 0.36;
     }
+    this.ghostEdgeMaterial?.color.setHex(color);
+    if (this.ghostEdgeMaterial) this.ghostEdgeMaterial.opacity = valid ? 0.85 : 0.9;
+    this.ghostMarkerMaterial?.color.setHex(color);
 
     this.current = {
       type: this.activeType,
