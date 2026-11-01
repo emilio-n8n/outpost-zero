@@ -1893,6 +1893,14 @@ export class Game {
       setPitch: (pitch: number) => {
         this.cameraRig.pitch = Math.max(CAMERA.minPitch, Math.min(CAMERA.maxPitch, pitch));
       },
+      advance: (seconds: number) => {
+        if (this.state !== 'playing' || this.menuOpen) return;
+        const steps = Math.min(400, Math.max(1, Math.ceil(seconds / 0.05)));
+        for (let i = 0; i < steps; i++) {
+          if (this.state !== 'playing') break;
+          this.simulate(0.05);
+        }
+      },
       setYaw: (yaw: number) => {
         this.cameraRig.yaw = yaw;
       },

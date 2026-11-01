@@ -26,6 +26,7 @@ interface OutpostDebugApi {
   nearestNodeOfType: (type: string) => { id: string; type: string; x: number; z: number } | null;
   setPitch: (pitch: number) => void;
   setYaw: (yaw: number) => void;
+  advance: (seconds: number) => void;
   tryPlace: () => { ok: boolean; reason?: string; count?: number };
   tryPlaceAt: (x: number, z: number) => { ok: boolean; reason?: string; count?: number };
   cancelBuild: () => void;

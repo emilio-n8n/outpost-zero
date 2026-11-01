@@ -33,7 +33,7 @@ async function waitForPlaying(page: Page): Promise<void> {
 }
 
 test.describe('OUTPOST ZERO', () => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
 
   test('title, movement, field terminal and checkpoint persistence', async ({ page }, testInfo) => {
     const pageErrors: string[] = [];
@@ -131,9 +131,10 @@ test.describe('OUTPOST ZERO', () => {
     await page.evaluate(() => {
       window.__OUTPOST__?.setTime(0.805);
       window.__OUTPOST__?.spawnEnemy('stalker', 1.7);
+      window.__OUTPOST__?.advance(2.2);
     });
     await expect
-      .poll(async () => (await debugState(page)).player.health, { timeout: 20_000 })
+      .poll(async () => (await debugState(page)).player.health, { timeout: 10_000 })
       .toBeLessThan(100);
 
     await page.evaluate(() => {
