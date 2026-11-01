@@ -66,7 +66,7 @@ export class Input {
 
   private handleMouseDown = (event: MouseEvent): void => {
     if (!this.enabled) return;
-    if (event.target instanceof HTMLElement && event.target.closest('.ui-layer')) return;
+    if (event.target instanceof HTMLElement && event.target.closest('#ui-root')) return;
     this.mouseButtons.add(event.button);
     this.mousePressed.add(event.button);
   };

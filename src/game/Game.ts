@@ -1307,7 +1307,7 @@ export class Game {
   }
 
   private handleAttack(): void {
-    if (!this.input.isPointerLocked() || this.input.isMouseDown(2)) return;
+    if (!this.input.isPointerLocked()) return;
     if (!this.input.consumeMousePressed(0) || performance.now() < this.attackGuardUntil) return;
     const slot = selectedSlot(this.inventory);
     if (!slot) return;

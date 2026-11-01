@@ -44,7 +44,7 @@ export class SkyLife {
     this.tendrilGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
 
     const colors = [0x78ffe3, 0xa8c9ff, 0xe6a0ff, 0x7fffe0];
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 8; i++) {
       const group = new THREE.Group();
       const color = this.rng.pick(colors);
       const bellMaterial = new THREE.MeshBasicMaterial({
