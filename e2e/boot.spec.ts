@@ -10,6 +10,7 @@ interface DebugState {
   enemies: number;
   structures: number;
   pointerLocked: boolean;
+  inventory: Record<string, number> & { tools: { axe: boolean; pick: boolean }; selected: number };
   lastSaveAttempt: { manual: boolean; result: string; at: number } | null;
   lastUiAction: { action: string; value: string; at: number } | null;
 }
@@ -115,8 +116,12 @@ test.describe('OUTPOST ZERO', () => {
     await page.locator('#btn-new-game').click();
     await waitForPlaying(page);
 
-    await page.evaluate(() => window.__OUTPOST__?.enterNight());
-    await page.waitForTimeout(1400);
+    await page.evaluate(() => {
+      window.__OUTPOST__?.enterNight();
+      window.__OUTPOST__?.spawnWaveAt(4, 6);
+    });
+    await page.keyboard.press('f');
+    await page.waitForTimeout(2000);
     const nightState = await debugState(page);
     expect(nightState.enemies).toBeGreaterThan(0);
     await page.screenshot({ path: testInfo.outputPath('08-nightfall.png') });
@@ -129,6 +134,61 @@ test.describe('OUTPOST ZERO', () => {
     await expect(page.locator('[data-testid="tab-build"]')).toHaveClass(/is-active/);
     await page.waitForTimeout(400);
     await page.screenshot({ path: testInfo.outputPath('09-construction.png') });
+
+    expect(pageErrors).toEqual([]);
+  });
+
+  test('gathering, crafting and construction readiness', async ({ page }, testInfo) => {
+    const pageErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+
+    await page.goto('/');
+    await expect(page.locator('#title-screen')).toBeVisible({ timeout: 90_000 });
+    await page.locator('#btn-new-game').click();
+    await waitForPlaying(page);
+
+    await page.evaluate(() => {
+      window.__OUTPOST__?.giveResources({ wood: 40, metal: 30, energy: 20, food: 6 });
+      window.__OUTPOST__?.openTerminal('crafting');
+    });
+    await expect(page.locator('#terminal-screen')).toBeVisible();
+    const axeButton = page.locator('button[data-action="craft"][data-value="axe"]');
+    await expect(axeButton).toBeEnabled({ timeout: 10_000 });
+    await axeButton.click();
+    await expect(page.locator('button[data-action="craft"][data-value="axe"]')).toContainText(
+      'INSTALLED',
+      { timeout: 10_000 },
+    );
+    await expect(page.locator('#toast-stack .toast').filter({ hasText: 'FABRICATED' })).toBeVisible({
+      timeout: 10_000,
+    });
+    const crafted = await debugState(page);
+    expect(crafted.inventory.tools.axe).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath('10-crafting-ready.png') });
+
+    await page.evaluate(() => window.__OUTPOST__?.closeTerminal());
+    const node = await page.evaluate(() => window.__OUTPOST__?.nearestNodeOfType('wood') ?? null);
+    expect(node).not.toBeNull();
+    if (node) {
+      await page.evaluate(
+        (target) => window.__OUTPOST__?.teleport(target.x + 1.7, target.z + 0.25),
+        node,
+      );
+      await expect(page.locator('#interaction-prompt')).toHaveClass(/is-visible/, {
+        timeout: 15_000,
+      });
+      const before = await debugState(page);
+      await page.keyboard.press('e');
+      await expect
+        .poll(async () => (await debugState(page)).inventory.wood, { timeout: 15_000 })
+        .toBeGreaterThan(before.inventory.wood);
+      await page.screenshot({ path: testInfo.outputPath('11-harvest.png') });
+    }
+
+    await page.evaluate(() => window.__OUTPOST__?.openTerminal('build'));
+    await expect(page.locator('[data-testid="tab-build"]')).toHaveClass(/is-active/);
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: testInfo.outputPath('12-construction-ready.png') });
 
     expect(pageErrors).toEqual([]);
   });

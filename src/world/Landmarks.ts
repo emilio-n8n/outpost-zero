@@ -287,21 +287,124 @@ export class Landmarks {
 
     const pod = new THREE.Group();
     pod.position.set(0, ground, 9);
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(2.35, 3.0, 8, 14), hullMaterial);
-    body.position.y = 3.3;
-    body.rotation.z = 0.47;
-    body.rotation.x = 0.1;
+    pod.rotation.y = 0.18;
+
+    const hull = new THREE.Group();
+    hull.position.y = 3.25;
+    hull.rotation.set(0.1, 0, 0.47);
+    hull.scale.setScalar(0.94);
+    pod.add(hull);
+
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(1.95, 3.2, 8, 16), hullMaterial);
     body.castShadow = true;
     body.receiveShadow = true;
-    pod.add(body);
-    const stripe = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 0.55, 14, 1, true), orangeMaterial);
-    stripe.position.y = 3.9;
-    stripe.rotation.z = 0.47;
-    pod.add(stripe);
-    const window = new THREE.Mesh(new THREE.CylinderGeometry(2.37, 2.37, 1.05, 14, 1, true, 0.2, 1.3), glassMaterial);
-    window.position.set(0.2, 4.7, 0.2);
-    window.rotation.z = 0.47;
-    pod.add(window);
+    hull.add(body);
+
+    const lowerModule = new THREE.Mesh(new THREE.CylinderGeometry(1.55, 1.8, 1.15, 12), darkMaterial);
+    lowerModule.position.y = -1.95;
+    lowerModule.castShadow = true;
+    hull.add(lowerModule);
+    const engineBell = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.15, 1.65, 0.55, 12, 1, true),
+      darkMaterial,
+    );
+    engineBell.position.y = -2.65;
+    engineBell.castShadow = true;
+    hull.add(engineBell);
+    const engineGlow = new THREE.Mesh(
+      new THREE.CircleGeometry(0.62, 12),
+      new THREE.MeshBasicMaterial({ color: 0xff874d, toneMapped: false }),
+    );
+    engineGlow.rotation.x = Math.PI / 2;
+    engineGlow.position.y = -2.91;
+    hull.add(engineGlow);
+
+    const bandMaterial = new THREE.MeshStandardMaterial({
+      color: 0x2f393b,
+      roughness: 0.5,
+      metalness: 0.58,
+      flatShading: true,
+    });
+    for (const [y, radius] of [
+      [-1.35, 1.84],
+      [-0.3, 1.97],
+      [0.85, 1.98],
+      [1.75, 1.55],
+    ] as const) {
+      const band = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.07, 5, 24), bandMaterial);
+      band.rotation.x = Math.PI / 2;
+      band.position.y = y;
+      band.castShadow = true;
+      hull.add(band);
+    }
+
+    const stripe = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.98, 1.98, 0.34, 16, 1, true),
+      orangeMaterial,
+    );
+    stripe.position.y = -0.62;
+    hull.add(stripe);
+
+    const window = new THREE.Mesh(
+      new THREE.SphereGeometry(1.2, 10, 6, 0, Math.PI * 0.9, 0.12, Math.PI * 0.5),
+      glassMaterial,
+    );
+    window.scale.set(0.86, 0.82, 0.5);
+    window.position.set(0.1, 0.55, 1.7);
+    window.rotation.x = -0.1;
+    hull.add(window);
+    for (let i = 0; i < 3; i++) {
+      const strip = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 0.06, 0.04),
+        new THREE.MeshBasicMaterial({ color: 0x7bffe6, toneMapped: false }),
+      );
+      strip.position.set(-0.72 + i * 0.68, 0.18, 1.87);
+      strip.rotation.x = -0.08;
+      hull.add(strip);
+    }
+
+    const hatch = new THREE.Mesh(new THREE.BoxGeometry(1.06, 1.32, 0.12), darkMaterial);
+    hatch.position.set(-1.12, -1.05, 1.25);
+    hatch.rotation.set(-0.15, 0.65, 0.1);
+    hull.add(hatch);
+    const hatchLight = new THREE.Mesh(
+      new THREE.BoxGeometry(0.6, 0.045, 0.02),
+      new THREE.MeshBasicMaterial({ color: 0xff9f58, toneMapped: false }),
+    );
+    hatchLight.position.set(-1.05, -0.72, 1.37);
+    hatchLight.rotation.set(-0.15, 0.65, 0.1);
+    hull.add(hatchLight);
+
+    for (const side of [-1, 1]) {
+      const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 2.1, 8), hullMaterial);
+      tank.position.set(side * 2.02, -1.05, -0.18);
+      tank.rotation.z = side * 0.08;
+      tank.castShadow = true;
+      hull.add(tank);
+      const tankCap = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.4, 0.28, 8), orangeMaterial);
+      tankCap.position.set(side * 2.02, 0.05, -0.18);
+      hull.add(tankCap);
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.5, 1.2), hullMaterial);
+      fin.position.set(side * 1.8, -1.55, -0.8);
+      fin.rotation.set(0.28, 0, side * 0.3);
+      fin.castShadow = true;
+      hull.add(fin);
+    }
+
+    const topMast = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.06, 2.4, 5), darkMaterial);
+    topMast.position.set(0.35, 3.35, 0.1);
+    topMast.rotation.z = -0.16;
+    hull.add(topMast);
+    const beaconLight = new THREE.Mesh(
+      new THREE.SphereGeometry(0.13, 8, 6),
+      new THREE.MeshBasicMaterial({ color: 0xff9c52, toneMapped: false }),
+    );
+    beaconLight.position.set(0.55, 4.55, 0.1);
+    hull.add(beaconLight);
+    const hullLight = new THREE.PointLight(0xffa45e, 4.5, 12, 2);
+    hullLight.position.set(0.2, 0.5, 2.2);
+    hull.add(hullLight);
+
     for (let i = 0; i < 3; i++) {
       const angle = (i / 3) * Math.PI * 2 + 0.4;
       const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.18, 4.2, 5), darkMaterial);
@@ -314,13 +417,65 @@ export class Landmarks {
       foot.position.set(Math.cos(angle) * 2.7, 0.1, Math.sin(angle) * 2.7);
       pod.add(foot);
     }
-    const beaconLight = new THREE.Mesh(
-      new THREE.SphereGeometry(0.13, 8, 6),
-      new THREE.MeshBasicMaterial({ color: 0xff9c52, toneMapped: false }),
-    );
-    beaconLight.position.set(1.1, 6.2, 0);
-    pod.add(beaconLight);
+
+    const loosePanel = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.14, 1.5), hullMaterial);
+    loosePanel.position.set(4.4, 0.12, 7.4);
+    loosePanel.rotation.set(0.06, 0.55, 0.12);
+    loosePanel.castShadow = true;
+    pod.add(loosePanel);
+
     this.root.add(pod);
+
+    const workLightPole = new THREE.Group();
+    workLightPole.position.set(-4.2, ground, 12.4);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 3.4, 5), darkMaterial);
+    pole.position.y = 1.7;
+    pole.castShadow = true;
+    workLightPole.add(pole);
+    const lampHead = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.24, 0.55), darkMaterial);
+    lampHead.position.set(0, 3.35, 0.2);
+    lampHead.rotation.x = -0.35;
+    workLightPole.add(lampHead);
+    const lampFace = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.72, 0.38),
+      new THREE.MeshBasicMaterial({ color: 0xffd7a0, toneMapped: false }),
+    );
+    lampFace.position.set(0, 3.28, 0.46);
+    lampFace.rotation.x = -0.35;
+    workLightPole.add(lampFace);
+    const workLight = new THREE.PointLight(0xffbb7a, 8, 17, 2);
+    workLight.position.set(0, 3.25, 0.8);
+    workLightPole.add(workLight);
+    this.root.add(workLightPole);
+
+    for (const [x, z, rot] of [
+      [4.8, 12.8, -0.35],
+      [-3.1, 5.4, 0.5],
+      [10.2, 2.7, 1.1],
+    ] as const) {
+      const crate = makeCrate();
+      crate.position.set(x, this.terrain.heightAt(x, z), z);
+      crate.rotation.y = rot;
+      this.root.add(crate);
+      this.addCollider({
+        x,
+        z,
+        radius: 0.6,
+        enabled: true,
+        blocksSight: false,
+        tag: 'landmark',
+        id: `outpost-crate-${x}-${z}`,
+      });
+    }
+    this.addCollider({
+      x: -4.2,
+      z: 12.4,
+      radius: 0.28,
+      enabled: true,
+      blocksSight: false,
+      tag: 'landmark',
+      id: 'outpost-worklight',
+    });
     this.addCollider({
       x: 0,
       z: 9,

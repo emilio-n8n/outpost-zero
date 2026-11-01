@@ -179,7 +179,7 @@ export class ResourceManager {
     this.energyMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
       emissive: 0x22ffe0,
-      emissiveIntensity: 1.25,
+      emissiveIntensity: 0.95,
       roughness: 0.18,
       metalness: 0.15,
       flatShading: true,
@@ -502,7 +502,7 @@ export class ResourceManager {
         this.setVisible(node, true);
       }
     }
-    this.energyMaterial.emissiveIntensity = 0.95 + Math.sin(elapsed * 2.1) * 0.3;
+    this.energyMaterial.emissiveIntensity = 0.78 + Math.sin(elapsed * 2.1) * 0.2;
     if (this.highlight.visible) {
       const pulse = 1 + Math.sin(elapsed * 5.6) * 0.08;
       this.highlight.rotation.z = elapsed * 0.6;

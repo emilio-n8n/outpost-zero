@@ -298,7 +298,7 @@ export class Game {
     this.player.group.rotation.y = yaw;
     this.enemies = new EnemyManager(this.scene, this.world, this.fx);
     this.buildSystem = new BuildSystem(this.scene, this.world.terrain);
-    this.cameraRig = new CameraRig(this.camera, this.world.terrain);
+    this.cameraRig = new CameraRig(this.camera, this.world.terrain, this.world);
     this.cameraRig.yaw = yaw;
     this.cameraRig.setSensitivity(this.settings.sensitivity);
 
@@ -1836,6 +1836,11 @@ export class Game {
         enemies: this.enemies.enemies.filter((enemy) => enemy.alive).length,
         structures: this.world.structures.structures.length,
         pointerLocked: this.input.isPointerLocked(),
+        inventory: {
+          ...this.inventory.resources,
+          tools: { ...this.inventory.tools },
+          selected: this.inventory.selected,
+        },
         lastSaveAttempt: this.lastSaveAttempt,
         lastUiAction: (window as unknown as { __OUTPOST_UI_ACTION__?: unknown }).__OUTPOST_UI_ACTION__ ?? null,
       }),
@@ -1867,6 +1872,27 @@ export class Game {
       teleport: (x: number, z: number) => {
         this.player.setPosition(new THREE.Vector3(x, this.world.groundHeight(x, z), z));
         this.cameraRig.reset();
+      },
+      nearestNodeOfType: (type: ResourceId) => {
+        let best: { id: string; type: ResourceId; x: number; z: number } | null = null;
+        let bestDistance = Infinity;
+        for (const node of this.world.resources.nodes) {
+          if (node.type !== type || !node.visible) continue;
+          const distance = Math.hypot(
+            node.position.x - this.player.position.x,
+            node.position.z - this.player.position.z,
+          );
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            best = {
+              id: node.id,
+              type: node.type,
+              x: node.position.x,
+              z: node.position.z,
+            };
+          }
+        }
+        return best;
       },
       openTerminal: (tab: TerminalTab) => {
         if (this.state !== 'playing') return;

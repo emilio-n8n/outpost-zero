@@ -81,13 +81,14 @@ const skyFragmentShader = /* glsl */ `
       float az = atan(dir.z, dir.x);
       vec2 auroraUv = vec2(az * 1.8 + uTime * 0.012, dir.y * 3.5 - uTime * 0.018);
       float broad = fbm21(auroraUv * 1.45);
-      float veil = smoothstep(0.46, 0.74, broad);
-      float curtain = smoothstep(0.06, 0.28, dir.y) * (1.0 - smoothstep(0.52, 0.86, dir.y));
-      float ribbon = sin(az * 9.0 + sin(az * 3.2) * 2.2 + uTime * 0.12) * 0.5 + 0.5;
-      float streak = smoothstep(0.68, 1.0, ribbon) * veil * curtain;
-      float fine = smoothstep(0.6, 0.95, fbm21(auroraUv * 3.7 + 11.0));
-      vec3 auroraColor = mix(vec3(0.08, 0.9, 0.66), vec3(0.46, 0.25, 0.95), 0.38 + broad * 0.3);
-      color += auroraColor * (streak * 0.85 + fine * streak * 0.4) * uAurora;
+      float veil = smoothstep(0.34, 0.68, broad);
+      float curtain = smoothstep(0.04, 0.2, dir.y) * (1.0 - smoothstep(0.58, 0.9, dir.y));
+      float ribbon = sin(az * 7.0 + sin(az * 3.2) * 2.2 + uTime * 0.12) * 0.5 + 0.5;
+      float streak = smoothstep(0.48, 0.94, ribbon) * veil * curtain;
+      float fine = smoothstep(0.55, 0.92, fbm21(auroraUv * 3.7 + 11.0));
+      float wash = smoothstep(0.04, 0.14, dir.y) * (1.0 - smoothstep(0.25, 0.5, dir.y)) * smoothstep(0.28, 0.8, broad);
+      vec3 auroraColor = mix(vec3(0.08, 0.95, 0.68), vec3(0.48, 0.24, 0.98), 0.35 + broad * 0.3);
+      color += auroraColor * (streak * 1.35 + fine * streak * 0.6 + wash * 0.32) * uAurora;
     }
 
     float dither = (hash21(gl_FragCoord.xy) - 0.5) / 255.0;
@@ -218,7 +219,7 @@ export class Sky {
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
     this.starMaterial = new THREE.PointsMaterial({
       color: 0xcdf9f2,
-      size: 1.35,
+      size: 1.65,
       sizeAttenuation: false,
       transparent: true,
       opacity: 0,
@@ -235,7 +236,7 @@ export class Sky {
     farGeometry.setAttribute('position', new THREE.Float32BufferAttribute(farPositions, 3));
     this.starMaterialFar = new THREE.PointsMaterial({
       color: 0x9bd9ff,
-      size: 2.1,
+      size: 2.5,
       sizeAttenuation: false,
       transparent: true,
       opacity: 0,
@@ -249,7 +250,7 @@ export class Sky {
     this.group.add(farStars);
 
     this.planet = new THREE.Group();
-    this.planet.position.set(-220, 82, -335);
+    this.planet.position.set(-210, 60, -335);
     this.planet.renderOrder = -99;
     const planetMesh = new THREE.Mesh(
       new THREE.SphereGeometry(42, 40, 28),

@@ -2076,7 +2076,7 @@ select:focus-visible {
 
 .terminal-kicker {
   font-family: var(--font-display);
-  font-size: 0.48rem;
+  font-size: 0.52rem;
   letter-spacing: 0.2em;
   color: var(--faint);
 }
@@ -2143,7 +2143,7 @@ select:focus-visible {
   gap: 0.45rem;
   padding: 0.75rem 1.1rem;
   font-family: var(--font-display);
-  font-size: 0.6rem;
+  font-size: 0.66rem;
   letter-spacing: 0.13em;
   color: var(--faint);
   border-right: 1px solid rgba(146, 224, 216, 0.08);
@@ -2226,7 +2226,7 @@ select:focus-visible {
   border-top: 1px solid rgba(146, 224, 216, 0.14);
   background: rgba(3, 12, 15, 0.75);
   font-family: var(--font-display);
-  font-size: 0.46rem;
+  font-size: 0.5rem;
   letter-spacing: 0.11em;
   color: var(--faint);
 }
@@ -2258,7 +2258,7 @@ select:focus-visible {
   padding-bottom: 0.35rem;
   border-bottom: 1px solid rgba(146, 224, 216, 0.14);
   font-family: var(--font-display);
-  font-size: 0.59rem;
+  font-size: 0.64rem;
   letter-spacing: 0.14em;
   color: var(--muted);
 }
@@ -2334,8 +2334,8 @@ select:focus-visible {
 .resource-card p {
   grid-column: 1 / -1;
   margin: 0.3rem 0 0;
-  color: var(--faint);
-  font-size: 0.66rem;
+  color: var(--muted);
+  font-size: 0.72rem;
   line-height: 1.25;
 }
 
@@ -2389,7 +2389,7 @@ select:focus-visible {
 .schematic-card strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--text-dim);
@@ -2400,15 +2400,15 @@ select:focus-visible {
   display: block;
   margin-top: 0.08rem;
   font-family: var(--font-display);
-  font-size: 0.43rem;
+  font-size: 0.48rem;
   letter-spacing: 0.08em;
   color: var(--faint);
 }
 
 .upgrade-card p {
   margin: 0.15rem 0 0;
-  color: var(--faint);
-  font-size: 0.65rem;
+  color: var(--muted);
+  font-size: 0.7rem;
   line-height: 1.2;
 }
 
@@ -2454,7 +2454,7 @@ select:focus-visible {
   justify-content: space-between;
   padding: 0.26rem 0;
   font-family: var(--font-display);
-  font-size: 0.48rem;
+  font-size: 0.54rem;
   letter-spacing: 0.05em;
   color: var(--faint);
   border-bottom: 1px solid rgba(146, 224, 216, 0.045);
@@ -2641,7 +2641,7 @@ select:focus-visible {
 .recipe-name h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--text);
@@ -2651,7 +2651,7 @@ select:focus-visible {
   padding: 0.08rem 0.28rem;
   border: 1px solid rgba(146, 224, 216, 0.13);
   font-family: var(--font-display);
-  font-size: 0.38rem;
+  font-size: 0.42rem;
   letter-spacing: 0.08em;
   color: var(--faint);
 }
@@ -2659,7 +2659,7 @@ select:focus-visible {
 .recipe-copy > p {
   margin: 0.15rem 0 0.35rem;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   line-height: 1.25;
 }
 
@@ -2675,10 +2675,10 @@ select:focus-visible {
   align-items: center;
   gap: 0.18rem;
   padding: 0.14rem 0.28rem;
-  border: 1px solid rgba(146, 224, 216, 0.1);
+  border: 1px solid rgba(146, 224, 216, 0.14);
   color: var(--faint);
   font-family: var(--font-display);
-  font-size: 0.43rem;
+  font-size: 0.49rem;
   letter-spacing: 0.03em;
 }
 
@@ -2692,7 +2692,7 @@ select:focus-visible {
 }
 
 .cost-chip small {
-  font-size: 0.38rem;
+  font-size: 0.42rem;
   color: var(--faint);
 }
 
@@ -2744,7 +2744,7 @@ select:focus-visible {
 
 .recipe-state {
   font-family: var(--font-display);
-  font-size: 0.44rem;
+  font-size: 0.49rem;
   letter-spacing: 0.08em;
   color: var(--faint);
   text-align: right;
@@ -2760,7 +2760,7 @@ select:focus-visible {
   border: 1px solid rgba(130, 239, 223, 0.3);
   color: var(--cyan);
   font-family: var(--font-display);
-  font-size: 0.48rem;
+  font-size: 0.55rem;
   letter-spacing: 0.1em;
   background: rgba(130, 239, 223, 0.04);
   transition:

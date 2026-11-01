@@ -20,9 +20,9 @@ export class PostFX {
     this.composer.addPass(new RenderPass(scene, camera));
     this.bloom = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.52,
-      0.62,
-      0.82,
+      0.38,
+      0.58,
+      0.88,
     );
     this.composer.addPass(this.bloom);
     this.composer.addPass(new OutputPass());
@@ -31,7 +31,7 @@ export class PostFX {
 
   setQuality(quality: QualityLevel): void {
     this.enabled = quality !== 'low';
-    this.bloom.strength = quality === 'high' ? 0.62 : 0.45;
+    this.bloom.strength = quality === 'high' ? 0.46 : 0.36;
     this.bloom.enabled = this.enabled;
   }
 

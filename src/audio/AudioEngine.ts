@@ -134,6 +134,7 @@ export class AudioEngine {
 
   update(dt: number, night: number, nearFire: boolean, siege: boolean): void {
     if (!this.ctx || !this.initialized) return;
+    try {
     this.currentNight = night;
     this.currentSiege = siege;
     const now = this.ctx.currentTime;
@@ -166,6 +167,9 @@ export class AudioEngine {
         this.fireTimer = 0.08 + Math.random() * 0.5;
         this.noise(0.045, 0.008 + Math.random() * 0.012, 900 + Math.random() * 1800, 'bandpass', 3);
       }
+    }
+    } catch {
+      // Ignore transient WebAudio failures; the game loop must continue.
     }
   }
 

@@ -1031,7 +1031,7 @@ export class UI {
       kind === 'danger' ? 'warning' : kind === 'success' ? 'check' : kind === 'warning' ? 'warning' : 'info';
     toast.innerHTML = `<span class="toast-icon">${icon(glyph as IconName)}</span><span>${escapeHtml(message)}</span>`;
     stack.appendChild(toast);
-    for (const child of Array.from(stack.children).slice(0, 4)) child.remove();
+    while (stack.children.length > 4) stack.firstElementChild?.remove();
     window.setTimeout(() => {
       toast.classList.add('is-leaving');
       window.setTimeout(() => toast.remove(), 300);
@@ -1210,7 +1210,9 @@ export class UI {
     ctx.restore();
 
     const coords = this.get('minimap-coords');
-    coords.textContent = `${pad(Math.round(this.game.player.position.x), 3)} · ${pad(Math.round(this.game.player.position.z), 3)}`;
+    const pxCoord = Math.round(this.game.player.position.x);
+    const pzCoord = Math.round(this.game.player.position.z);
+    coords.textContent = `${pxCoord >= 0 ? '+' : ''}${pxCoord} · ${pzCoord >= 0 ? '+' : ''}${pzCoord}`;
   }
 
   updateHud(): void {

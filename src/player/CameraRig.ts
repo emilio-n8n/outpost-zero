@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { CAMERA } from '../config';
 import { Terrain } from '../world/Terrain';
+import type { World } from '../world/World';
 
 export interface CameraTarget {
   position: THREE.Vector3;
@@ -23,10 +24,12 @@ export class CameraRig {
   private fov: number = CAMERA.baseFov;
   private initialized = false;
   private readonly terrain: Terrain;
+  private readonly world: World;
 
-  constructor(camera: THREE.PerspectiveCamera, terrain: Terrain) {
+  constructor(camera: THREE.PerspectiveCamera, terrain: Terrain, world: World) {
     this.camera = camera;
     this.terrain = terrain;
+    this.world = world;
     this.yaw = 2.5;
   }
 
@@ -88,6 +91,10 @@ export class CameraRig {
     const desired = focus
       .clone()
       .addScaledVector(this.lookDirection, -desiredDistance);
+    const resolved = this.world.resolveMovement(desired.x, desired.z, 0.38, 0, 0);
+    desired.x = resolved.x;
+    desired.z = resolved.z;
+    desired.y = Math.max(desired.y, this.terrain.heightAt(desired.x, desired.z) + 0.42);
     desired.y += Math.sin(this.shakeTime * 47) * this.shake * 0.35;
     desired.x += Math.cos(this.shakeTime * 53) * this.shake * 0.25;
 
