@@ -1,9 +1,19 @@
 {
   "name": "outpost-zero",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "A stylized 3D alien survival game that runs in the browser.",
+  "description": "OUTPOST ZERO — a stylized 3D alien survival game that runs in the browser.",
+  "author": "Emilio Moreau",
+  "license": "MIT",
+  "homepage": "https://emilio-n8n.github.io/outpost-zero/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emilio-n8n/outpost-zero.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

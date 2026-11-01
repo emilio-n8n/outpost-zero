@@ -207,7 +207,7 @@ test.describe('OUTPOST ZERO', () => {
     await expect(page.locator('#build-hud')).toHaveClass(/is-visible/, { timeout: 10_000 });
     await page.evaluate(() => {
       window.__OUTPOST__?.teleport(0, 14);
-      window.__OUTPOST__?.setYaw(Math.PI);
+      window.__OUTPOST__?.setYaw(0);
     });
     let placed = false;
     for (const pitch of [-0.2, -0.28, -0.35, -0.42, -0.15, -0.5]) {
@@ -229,6 +229,8 @@ test.describe('OUTPOST ZERO', () => {
     expect(placed).toBe(true);
     expect((await debugState(page)).structures).toBeGreaterThan(structureCount);
     await page.evaluate(() => window.__OUTPOST__?.cancelBuild());
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: testInfo.outputPath('13b-campfire.png') });
 
     const killsBefore = (await debugState(page)).kills;
     await page.evaluate(() => window.__OUTPOST__?.spawnEnemy('stalker', 2.2));

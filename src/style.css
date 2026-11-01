@@ -414,6 +414,15 @@ select:focus-visible {
   padding-bottom: 3vh;
 }
 
+.title-copy::before {
+  content: '';
+  position: absolute;
+  inset: -3rem -9rem -4rem -5rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 34% 58%, rgba(3, 10, 13, 0.78), rgba(3, 10, 13, 0.28) 46%, transparent 72%);
+}
+
 .eyebrow {
   display: flex;
   align-items: center;
