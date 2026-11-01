@@ -1712,7 +1712,7 @@ select:focus-visible {
 
 .toast-stack {
   position: fixed;
-  z-index: 85;
+  z-index: 12;
   left: 50%;
   top: 10.6rem;
   width: min(22rem, 32vw);
@@ -1838,7 +1838,7 @@ select:focus-visible {
   position: fixed;
   left: 50%;
   top: 23%;
-  z-index: 65;
+  z-index: 11;
   transform: translate(-50%, 12px);
   text-align: center;
   opacity: 0;
@@ -1896,7 +1896,7 @@ select:focus-visible {
 
 .discovery-overlay {
   position: fixed;
-  z-index: 75;
+  z-index: 13;
   left: 50%;
   top: 25%;
   transform: translate(-50%, 10px);
@@ -2548,6 +2548,43 @@ select:focus-visible {
   margin-left: auto;
   color: var(--faint);
   font-size: 0.38rem;
+}
+
+.field-record {
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid rgba(146, 224, 216, 0.11);
+  background: rgba(10, 28, 30, 0.2);
+}
+
+.field-record > span {
+  display: block;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
+  border-bottom: 1px solid rgba(146, 224, 216, 0.1);
+  font-family: var(--font-display);
+  font-size: 0.47rem;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+}
+
+.field-record dl {
+  margin: 0;
+}
+
+.field-record div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.22rem 0;
+  font-family: var(--font-display);
+  font-size: 0.49rem;
+  letter-spacing: 0.05em;
+  color: var(--faint);
+}
+
+.field-record dd {
+  margin: 0;
+  color: var(--text-dim);
 }
 
 .terminal-note {

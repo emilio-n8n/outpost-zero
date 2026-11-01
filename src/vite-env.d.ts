@@ -22,6 +22,7 @@ interface OutpostDebugApi {
   giveResources: (resources: Record<string, number>) => void;
   teleport: (x: number, z: number) => void;
   nearestNodeOfType: (type: string) => { id: string; type: string; x: number; z: number } | null;
+  interact: () => void;
   openTerminal: (tab: 'inventory' | 'crafting' | 'build') => void;
   closeTerminal: () => void;
   startBuild: (type: string) => void;

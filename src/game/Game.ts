@@ -1852,8 +1852,8 @@ export class Game {
       enterNight: () => {
         if (!this.world) return;
         this.clock = 0.86;
+        this.nightDirector.setNight(1);
         this.nightDirector.syncClock(this.clock);
-        this.spawnWave(4);
       },
       spawnWave: (count = 4) => {
         this.spawnWave(count);
@@ -1872,6 +1872,11 @@ export class Game {
       teleport: (x: number, z: number) => {
         this.player.setPosition(new THREE.Vector3(x, this.world.groundHeight(x, z), z));
         this.cameraRig.reset();
+      },
+      interact: () => {
+        if (this.state !== 'playing' || this.menuOpen) return;
+        this.updateInteraction();
+        if (this.currentInteraction) this.performInteraction();
       },
       nearestNodeOfType: (type: ResourceId) => {
         let best: { id: string; type: ResourceId; x: number; z: number } | null = null;
@@ -1912,9 +1917,11 @@ export class Game {
 
   private spawnWave(count: number, distance = 13): void {
     if (!this.world || !this.player) return;
+    const forward = this.cameraRig?.yaw ?? this.player.yaw;
     for (let i = 0; i < count; i++) {
-      const angle = (i / Math.max(1, count)) * Math.PI * 2 + Math.random() * 0.4;
-      const radius = distance + Math.random() * 5;
+      const spread = count <= 1 ? 0 : (i - (count - 1) / 2) * 0.42;
+      const angle = forward + spread + Math.random() * 0.1 - 0.05;
+      const radius = distance + Math.random() * 2.5;
       const x = this.player.position.x + Math.cos(angle) * radius;
       const z = this.player.position.z + Math.sin(angle) * radius;
       const y = this.world.groundHeight(x, z);

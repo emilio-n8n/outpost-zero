@@ -87,13 +87,20 @@ export class CameraRig {
         break;
       }
     }
-    const desiredDistance = this.currentDistance * safeT;
+    let desiredDistance = this.currentDistance * safeT;
+    const backDirection = this.lookDirection.clone().negate();
+    const obstruction = this.world.raycastStatics(
+      focus,
+      backDirection,
+      desiredDistance,
+      false,
+    );
+    if (obstruction !== null) {
+      desiredDistance = Math.max(0.95, obstruction - 0.28);
+    }
     const desired = focus
       .clone()
       .addScaledVector(this.lookDirection, -desiredDistance);
-    const resolved = this.world.resolveMovement(desired.x, desired.z, 0.38, 0, 0);
-    desired.x = resolved.x;
-    desired.z = resolved.z;
     desired.y = Math.max(desired.y, this.terrain.heightAt(desired.x, desired.z) + 0.42);
     desired.y += Math.sin(this.shakeTime * 47) * this.shake * 0.35;
     desired.x += Math.cos(this.shakeTime * 53) * this.shake * 0.25;

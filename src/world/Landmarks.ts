@@ -401,7 +401,7 @@ export class Landmarks {
     );
     beaconLight.position.set(0.55, 4.55, 0.1);
     hull.add(beaconLight);
-    const hullLight = new THREE.PointLight(0xffa45e, 4.5, 12, 2);
+    const hullLight = new THREE.PointLight(0xffa45e, 2.2, 10, 2);
     hullLight.position.set(0.2, 0.5, 2.2);
     hull.add(hullLight);
 
@@ -443,7 +443,7 @@ export class Landmarks {
     lampFace.position.set(0, 3.28, 0.46);
     lampFace.rotation.x = -0.35;
     workLightPole.add(lampFace);
-    const workLight = new THREE.PointLight(0xffbb7a, 8, 17, 2);
+    const workLight = new THREE.PointLight(0xffbb7a, 5.5, 16, 2);
     workLight.position.set(0, 3.25, 0.8);
     workLightPole.add(workLight);
     this.root.add(workLightPole);

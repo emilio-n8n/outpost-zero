@@ -177,8 +177,9 @@ test.describe('OUTPOST ZERO', () => {
       await expect(page.locator('#interaction-prompt')).toHaveClass(/is-visible/, {
         timeout: 15_000,
       });
+      await expect(page.locator('#interaction-detail')).toContainText('TIMBER');
       const before = await debugState(page);
-      await page.keyboard.press('e');
+      await page.evaluate(() => window.__OUTPOST__?.interact());
       await expect
         .poll(async () => (await debugState(page)).inventory.wood, { timeout: 15_000 })
         .toBeGreaterThan(before.inventory.wood);

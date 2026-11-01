@@ -829,6 +829,15 @@ export class UI {
           <button class="biomass-button" data-action="eat-biomass" type="button" ${inventory.resources.food <= 0 ? 'disabled' : ''}>
             ${icon('food')} CONSUME 1 BIOMASS <span>+12 HUNGER · ${inventory.resources.food} LEFT</span>
           </button>
+          <div class="field-record">
+            <span>FIELD RECORD</span>
+            <dl>
+              <div><dt>NIGHTS SURVIVED</dt><dd>${pad(this.game.stats.nightsSurvived)}</dd></div>
+              <div><dt>HOSTILES DOWN</dt><dd>${pad(this.game.stats.kills)}</dd></div>
+              <div><dt>RESOURCES GATHERED</dt><dd>${this.game.stats.resourcesGathered}</dd></div>
+              <div><dt>STRUCTURES DEPLOYED</dt><dd>${this.game.stats.structuresBuilt}</dd></div>
+            </dl>
+          </div>
           <div class="terminal-note">
             <span>${icon('info')}</span>
             <p>Tools are permanent passive upgrades. Select a weapon or consumable in the hotbar, then use it in the field with LMB.</p>

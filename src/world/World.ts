@@ -8,6 +8,7 @@ import { Landmarks } from './Landmarks';
 import { ResourceManager } from './ResourceManager';
 import { Scatter } from './Scatter';
 import { Sky } from './Sky';
+import { SkyLife } from './SkyLife';
 import { StructureManager } from './Structures';
 import { Terrain } from './Terrain';
 import type { BoxCollider, CircleCollider, WorldInteractable, WorldPOI } from './types';
@@ -16,6 +17,7 @@ export class World {
   readonly seed: string;
   readonly terrain: Terrain;
   readonly sky: Sky;
+  readonly skyLife: SkyLife;
   readonly scatter: Scatter;
   readonly landmarks: Landmarks;
   readonly resources: ResourceManager;
@@ -43,6 +45,7 @@ export class World {
 
     this.terrain = new Terrain(seed, scene);
     this.sky = new Sky(scene);
+    this.skyLife = new SkyLife(scene);
 
     this.hemisphere = new THREE.HemisphereLight(0x9bd8d2, 0x241c17, 1.1);
     scene.add(this.hemisphere);
@@ -174,6 +177,7 @@ export class World {
     const night = nightStrength(clock);
     const palette = skyPalette(clock);
     this.sky.update(camera, clock, this.elapsed, night);
+    this.skyLife.update(this.elapsed, night);
 
     const sunDir = sunDirection(clock);
     const moonDir = moonDirection(clock);
@@ -454,6 +458,7 @@ export class World {
     this.landmarks.dispose();
     this.scatter.dispose(this.scene);
     this.sky.dispose(this.scene);
+    this.skyLife.dispose();
     this.terrain.dispose(this.scene);
     this.scene.remove(this.hemisphere, this.ambient, this.sun, this.sun.target, this.moon, this.moon.target);
     this.scene.remove(this.motes);
