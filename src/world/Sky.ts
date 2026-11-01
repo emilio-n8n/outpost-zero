@@ -250,7 +250,7 @@ export class Sky {
     this.group.add(farStars);
 
     this.planet = new THREE.Group();
-    this.planet.position.set(-205, 46, -335);
+    this.planet.position.set(-205, 38, -335);
     this.planet.renderOrder = -99;
     const planetMesh = new THREE.Mesh(
       new THREE.SphereGeometry(42, 40, 28),

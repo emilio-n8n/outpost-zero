@@ -10,6 +10,8 @@ interface OutpostDebugApi {
     player: { x: number; y: number; z: number; health: number; hunger: number };
     enemies: number;
     structures: number;
+    kills: number;
+    placement: { type: string; valid: boolean; reason: string | null; x: number; z: number } | null;
     pointerLocked: boolean;
     inventory: Record<string, number> & { tools: { axe: boolean; pick: boolean }; selected: number };
     lastSaveAttempt: { manual: boolean; result: string; at: number } | null;
@@ -22,6 +24,12 @@ interface OutpostDebugApi {
   giveResources: (resources: Record<string, number>) => void;
   teleport: (x: number, z: number) => void;
   nearestNodeOfType: (type: string) => { id: string; type: string; x: number; z: number } | null;
+  setPitch: (pitch: number) => void;
+  setYaw: (yaw: number) => void;
+  tryPlace: () => { ok: boolean; reason?: string; count?: number };
+  cancelBuild: () => void;
+  spawnEnemy: (type: string, distance?: number) => void;
+  melee: () => void;
   interact: () => void;
   openTerminal: (tab: 'inventory' | 'crafting' | 'build') => void;
   closeTerminal: () => void;

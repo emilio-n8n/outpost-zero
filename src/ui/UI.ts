@@ -262,6 +262,7 @@ export class UI {
             <span class="crosshair-line top"></span><span class="crosshair-line right"></span>
             <span class="crosshair-line bottom"></span><span class="crosshair-line left"></span>
             <span class="crosshair-dot"></span>
+            <span class="hitmarker" id="hitmarker"><i></i><i></i><i></i><i></i></span>
           </div>
           <div class="weapon-readout" id="weapon-readout">ARC CUTTER // READY</div>
 
@@ -1045,6 +1046,15 @@ export class UI {
       toast.classList.add('is-leaving');
       window.setTimeout(() => toast.remove(), 300);
     }, 5000);
+  }
+
+  hitmarker(critical = false): void {
+    const marker = this.get('hitmarker');
+    marker.classList.remove('is-active', 'is-critical');
+    void marker.offsetWidth;
+    marker.classList.add('is-active');
+    marker.classList.toggle('is-critical', critical);
+    window.setTimeout(() => marker.classList.remove('is-active'), 180);
   }
 
   damageFlash(): void {

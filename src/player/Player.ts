@@ -566,7 +566,7 @@ export class Player {
       this.flashlight.position.set(this.position.x, this.position.y + 1.62, this.position.z);
       this.flashlight.position.addScaledVector(look, 0.25);
       this.flashlightTarget.position.copy(this.flashlight.position).addScaledVector(look, 18);
-      this.flashlight.intensity = 65;
+      this.flashlight.intensity = 105;
     } else {
       this.flashlight.intensity = 0;
     }

@@ -1347,6 +1347,7 @@ export class Game {
     if (hits > 0) {
       this.audio.hit();
       this.cameraRig.addShake(0.12);
+      this.ui.hitmarker(false);
     }
   }
 
@@ -1379,6 +1380,7 @@ export class Game {
       const damage = COMBAT.rifleDamage * (enemyHit.critical ? COMBAT.rifleCritMultiplier : 1);
       this.enemies.damageEnemy(enemyHit.enemy, damage, enemyHit.point, this.enemyCallbacks());
       this.audio.hit();
+      this.ui.hitmarker(enemyHit.critical);
       this.fx.impact(enemyHit.point, enemyHit.critical ? 0xff9070 : 0xffc07a);
     } else if (obstacleDistance !== null) {
       endpoint = this.camera.position.clone().addScaledVector(direction, obstacleDistance);
@@ -1835,6 +1837,16 @@ export class Game {
         },
         enemies: this.enemies.enemies.filter((enemy) => enemy.alive).length,
         structures: this.world.structures.structures.length,
+        kills: this.stats.kills,
+        placement: this.placement
+          ? {
+              type: this.placement.type,
+              valid: this.placement.valid,
+              reason: this.placement.reason,
+              x: this.placement.x,
+              z: this.placement.z,
+            }
+          : null,
         pointerLocked: this.input.isPointerLocked(),
         inventory: {
           ...this.inventory.resources,
@@ -1877,6 +1889,46 @@ export class Game {
         if (this.state !== 'playing' || this.menuOpen) return;
         this.updateInteraction();
         if (this.currentInteraction) this.performInteraction();
+      },
+      setPitch: (pitch: number) => {
+        this.cameraRig.pitch = Math.max(CAMERA.minPitch, Math.min(CAMERA.maxPitch, pitch));
+      },
+      setYaw: (yaw: number) => {
+        this.cameraRig.yaw = yaw;
+      },
+      tryPlace: () => {
+        if (!this.buildSystem.activeType) return { ok: false, reason: 'build-inactive' };
+        this.placement = this.buildSystem.update(
+          this.camera,
+          this.player.position,
+          PLAYER.radius,
+          this.world,
+          this.world.structures,
+          this.inventory,
+          this.objectives.blueprints,
+          12,
+        );
+        if (!this.placement || !this.placement.valid) {
+          return { ok: false, reason: this.placement?.reason ?? 'no-placement' };
+        }
+        const before = this.world.structures.structures.length;
+        this.placeCurrentStructure();
+        return {
+          ok: this.world.structures.structures.length > before,
+          count: this.world.structures.structures.length,
+        };
+      },
+      cancelBuild: () => this.cancelBuildMode(true),
+      spawnEnemy: (type: EnemyType, distance = 2.4) => {
+        if (!this.world) return;
+        const yaw = this.cameraRig?.yaw ?? this.player.yaw;
+        const x = this.player.position.x + Math.sin(yaw) * distance;
+        const z = this.player.position.z + Math.cos(yaw) * distance;
+        this.enemies.spawn(type, new THREE.Vector3(x, this.world.groundHeight(x, z), z), Math.max(1, this.nightDirector.nightNumber));
+      },
+      melee: () => {
+        this.weaponCooldown = 0;
+        this.attackMelee();
       },
       nearestNodeOfType: (type: ResourceId) => {
         let best: { id: string; type: ResourceId; x: number; z: number } | null = null;

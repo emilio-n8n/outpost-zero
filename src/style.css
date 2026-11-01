@@ -1234,6 +1234,65 @@ select:focus-visible {
   background: var(--cyan);
 }
 
+.hitmarker {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hitmarker i {
+  position: absolute;
+  width: 7px;
+  height: 1px;
+  background: #f6fff8;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+}
+
+.hitmarker i:nth-child(1) {
+  top: 3px;
+  left: 3px;
+  transform: rotate(45deg);
+}
+
+.hitmarker i:nth-child(2) {
+  top: 3px;
+  right: 3px;
+  transform: rotate(-45deg);
+}
+
+.hitmarker i:nth-child(3) {
+  bottom: 3px;
+  left: 3px;
+  transform: rotate(-45deg);
+}
+
+.hitmarker i:nth-child(4) {
+  bottom: 3px;
+  right: 3px;
+  transform: rotate(45deg);
+}
+
+.hitmarker.is-active {
+  animation: hitmark 0.18s ease-out both;
+}
+
+.hitmarker.is-critical i {
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(255, 179, 92, 0.9);
+}
+
+@keyframes hitmark {
+  0% {
+    opacity: 1;
+    transform: scale(0.74);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
 #ui-root.is-modal .crosshair,
 #ui-root.is-modal .interaction-prompt,
 #ui-root.is-modal .weapon-readout,

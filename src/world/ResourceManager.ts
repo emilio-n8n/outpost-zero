@@ -248,7 +248,7 @@ export class ResourceManager {
     exclusion: number,
   ): boolean {
     const centerDistance = Math.hypot(x - OUTPOST.x, z - OUTPOST.z);
-    if (centerDistance < exclusion) return false;
+    if (centerDistance < Math.max(exclusion, 22.5)) return false;
     if (centerDistance > 88) return false;
     for (const site of SITES) {
       if (Math.hypot(x - site.x, z - site.z) < site.radius + 2.5) return false;
@@ -383,10 +383,10 @@ export class ResourceManager {
       }
     };
 
-    ring('wood', 9, 19, 31, 0.25);
-    ring('metal', 5, 20, 34, 1.4);
-    ring('energy', 4, 24, 38, 2.1);
-    ring('food', 6, 20, 34, 3.2);
+    ring('wood', 9, 23.5, 34, 0.25);
+    ring('metal', 5, 24, 36, 1.4);
+    ring('energy', 4, 25, 38, 2.1);
+    ring('food', 6, 24, 36, 3.2);
 
     for (const site of SITES) {
       for (let i = 0; i < 5; i++) {
@@ -414,7 +414,7 @@ export class ResourceManager {
       if (type === 'food') bias = fbm2D(x * 0.042 + 8, z * 0.042, 81, 3);
       if (type === 'energy') bias = fbm2D(x * 0.05 - 4, z * 0.05, 91, 3);
       if (bias < 0.42 && rng.chance(0.55)) continue;
-      tryPlace(type, x, z, 15);
+      tryPlace(type, x, z, 23.5);
       if (types.every((entry) => placed[entry] >= counts[entry])) break;
     }
   }

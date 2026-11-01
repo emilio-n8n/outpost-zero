@@ -29,10 +29,10 @@ interface EnemyPalette {
 }
 
 const PALETTES: Record<EnemyType, EnemyPalette> = {
-  stalker: { carapace: 0x3b544d, belly: 0x71806f, glow: 0xff7c3b, eye: 0xffb24f, accent: 0x9b5b3d },
-  brute: { carapace: 0x4e414c, belly: 0x7c645d, glow: 0xff5a3f, eye: 0xff8c5a, accent: 0x9c6949 },
-  spitter: { carapace: 0x35575a, belly: 0x72897c, glow: 0x9ff34f, eye: 0xd8ff60, accent: 0x6b8a52 },
-  warden: { carapace: 0x3f334d, belly: 0x7e616c, glow: 0xff3657, eye: 0xff5577, accent: 0xb45a66 },
+  stalker: { carapace: 0x4e7064, belly: 0x8fa08a, glow: 0xff914c, eye: 0xffc05d, accent: 0xb46b43 },
+  brute: { carapace: 0x665361, belly: 0x9c7a6c, glow: 0xff684b, eye: 0xff9b64, accent: 0xb17350 },
+  spitter: { carapace: 0x447172, belly: 0x8ba697, glow: 0xa9ff60, eye: 0xe2ff78, accent: 0x7c9c5f },
+  warden: { carapace: 0x574260, belly: 0x9b747d, glow: 0xff4a63, eye: 0xff6b87, accent: 0xc76973 },
 };
 
 function shortestAngle(from: number, to: number): number {
@@ -191,6 +191,20 @@ export class Enemy {
           [1, 1, 1],
         );
       }
+      const dorsalGlow = this.track(new THREE.SphereGeometry(0.055, 6, 5));
+      for (let i = 0; i < 4; i++) {
+        this.eyes.push(
+          this.addPart(
+            this.bodyGroup,
+            dorsalGlow,
+            glowMaterial,
+            [0, 1.38, 0.42 - i * 0.24],
+            [0, 0, 0],
+            [1, 0.6, 1],
+            false,
+          ),
+        );
+      }
       const legGeo = this.track(new THREE.BoxGeometry(0.13, 0.7, 0.14));
       const clawGeo = this.track(new THREE.ConeGeometry(0.07, 0.22, 4));
       for (let i = 0; i < 4; i++) {
@@ -246,6 +260,11 @@ export class Enemy {
       }
       const core = this.addPart(this.bodyGroup, eyeGeo, glowMaterial, [0, 1.48, 0.77], [0, 0, 0], [2, 2, 0.7], false);
       this.eyes.push(core);
+      for (const x of [-0.34, 0.34]) {
+        this.eyes.push(
+          this.addPart(this.bodyGroup, eyeGeo, glowMaterial, [x, 1.05, -0.58], [0, 0, 0], [1.2, 1.2, 0.5], false),
+        );
+      }
     } else if (this.type === 'spitter') {
       const torso = this.track(new THREE.CapsuleGeometry(0.3, 0.6, 5, 7));
       this.addPart(this.bodyGroup, torso, carapace, [0, 1.18, 0], [0, 0, 0], [1, 1, 0.8]);
@@ -329,6 +348,11 @@ export class Enemy {
       }
       const core = this.addPart(this.bodyGroup, eyeGeo, glowMaterial, [0, 1.95, 0.9], [0, 0, 0], [2.2, 2.2, 0.8], false);
       this.eyes.push(core);
+      for (const x of [-0.4, 0.4]) {
+        this.eyes.push(
+          this.addPart(this.bodyGroup, eyeGeo, glowMaterial, [x, 2.35, -0.75], [0, 0, 0], [1.4, 1.4, 0.5], false),
+        );
+      }
     }
 
     this.headGroup.position.set(0, 0, 0);

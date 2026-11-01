@@ -9,6 +9,8 @@ interface DebugState {
   player: { x: number; y: number; z: number; health: number; hunger: number };
   enemies: number;
   structures: number;
+  kills: number;
+  placement: { type: string; valid: boolean; reason: string | null; x: number; z: number } | null;
   pointerLocked: boolean;
   inventory: Record<string, number> & { tools: { axe: boolean; pick: boolean }; selected: number };
   lastSaveAttempt: { manual: boolean; result: string; at: number } | null;
@@ -190,6 +192,40 @@ test.describe('OUTPOST ZERO', () => {
     await expect(page.locator('[data-testid="tab-build"]')).toHaveClass(/is-active/);
     await page.waitForTimeout(500);
     await page.screenshot({ path: testInfo.outputPath('12-construction-ready.png') });
+
+    const structureCount = (await debugState(page)).structures;
+    await page.locator('button[data-action="build"][data-value="campfire"]').click();
+    await expect(page.locator('#build-hud')).toHaveClass(/is-visible/, { timeout: 10_000 });
+    await page.evaluate(() => {
+      window.__OUTPOST__?.teleport(0, 14);
+      window.__OUTPOST__?.setYaw(Math.PI);
+    });
+    let placed = false;
+    for (const pitch of [-0.2, -0.28, -0.35, -0.42, -0.15, -0.5]) {
+      await page.evaluate((value) => window.__OUTPOST__?.setPitch(value), pitch);
+      await page.waitForTimeout(350);
+      const state = await debugState(page);
+      if (state.placement?.valid) {
+        await page.screenshot({ path: testInfo.outputPath('13-build-preview.png') });
+        const result = await page.evaluate(() => window.__OUTPOST__?.tryPlace() ?? null);
+        expect(result?.ok).toBe(true);
+        placed = true;
+        break;
+      }
+    }
+    expect(placed).toBe(true);
+    expect((await debugState(page)).structures).toBeGreaterThan(structureCount);
+    await page.evaluate(() => window.__OUTPOST__?.cancelBuild());
+
+    const killsBefore = (await debugState(page)).kills;
+    await page.evaluate(() => window.__OUTPOST__?.spawnEnemy('stalker', 2.2));
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.__OUTPOST__?.melee());
+    await page.waitForTimeout(500);
+    await page.evaluate(() => window.__OUTPOST__?.melee());
+    await expect
+      .poll(async () => (await debugState(page)).kills, { timeout: 10_000 })
+      .toBeGreaterThan(killsBefore);
 
     expect(pageErrors).toEqual([]);
   });

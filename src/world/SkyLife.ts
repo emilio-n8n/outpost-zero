@@ -42,7 +42,7 @@ export class SkyLife {
     this.tendrilGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
 
     const colors = [0x78ffe3, 0xa8c9ff, 0xe6a0ff, 0x7fffe0];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 11; i++) {
       const group = new THREE.Group();
       const color = this.rng.pick(colors);
       const bellMaterial = new THREE.MeshBasicMaterial({
@@ -56,7 +56,7 @@ export class SkyLife {
         toneMapped: false,
       });
       const bell = new THREE.Mesh(this.bellGeometry, bellMaterial);
-      bell.scale.set(this.rng.range(0.6, 1.35), this.rng.range(0.4, 0.8), this.rng.range(0.6, 1.35));
+      bell.scale.set(this.rng.range(1.35, 3.0), this.rng.range(0.8, 1.5), this.rng.range(1.35, 3.0));
       group.add(bell);
 
       const coreMaterial = new THREE.MeshBasicMaterial({
@@ -70,7 +70,7 @@ export class SkyLife {
       });
       const core = new THREE.Mesh(this.coreGeometry, coreMaterial);
       core.position.y = -0.18;
-      core.scale.setScalar(this.rng.range(0.55, 1));
+      core.scale.setScalar(this.rng.range(1.1, 2.0));
       group.add(core);
 
       const tendrilMaterial = new THREE.LineBasicMaterial({
@@ -86,10 +86,23 @@ export class SkyLife {
       group.add(tendrils);
 
       const angle = this.rng.range(0, Math.PI * 2);
-      const radius = this.rng.range(20, 66);
-      const baseX = Math.cos(angle) * radius;
-      const baseZ = Math.sin(angle) * radius;
-      const baseY = this.rng.range(8, 22);
+      const radius = this.rng.range(18, 62);
+      let baseX = Math.cos(angle) * radius;
+      let baseZ = Math.sin(angle) * radius;
+      let baseY = this.rng.range(8, 20);
+      if (i === 0) {
+        baseX = -2;
+        baseZ = -8;
+        baseY = 14;
+      } else if (i === 1) {
+        baseX = 24;
+        baseZ = 2;
+        baseY = 16;
+      } else if (i === 2) {
+        baseX = 12;
+        baseZ = 33;
+        baseY = 18;
+      }
       group.position.set(baseX, baseY, baseZ);
       group.rotation.y = this.rng.range(0, Math.PI * 2);
       this.scene.add(group);
@@ -124,9 +137,9 @@ export class SkyLife {
       );
       drifter.group.rotation.y = t * 0.22;
       const pulse = 0.72 + Math.sin(t * 2.2) * 0.16;
-      drifter.bellMaterial.opacity = visibility * 0.28 * pulse;
-      drifter.coreMaterial.opacity = visibility * 0.75 * pulse;
-      drifter.tendrilMaterial.opacity = visibility * 0.18 * pulse;
+      drifter.bellMaterial.opacity = visibility * 0.46 * pulse;
+      drifter.coreMaterial.opacity = visibility * 0.95 * pulse;
+      drifter.tendrilMaterial.opacity = visibility * 0.28 * pulse;
       drifter.bell.rotation.z = Math.sin(t * 0.4) * 0.06;
       drifter.tendrils.rotation.z = Math.sin(t * 0.5) * 0.08;
     }
