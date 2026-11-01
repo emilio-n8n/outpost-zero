@@ -78,6 +78,9 @@ describe('save validation', () => {
     expect(validateSaveData({ version: SAVE_VERSION })).toBeNull();
     const save = makeSave();
     (save.inventory.hotbar as unknown[]) = [{ item: 'not-an-item', qty: 1 }];
-    expect(validateSaveData(save)).toBeNull();
+    const result = validateSaveData(save);
+    expect(result).not.toBeNull();
+    expect(result?.inventory.hotbar).toHaveLength(6);
+    expect(result?.inventory.hotbar.every((slot) => slot === null)).toBe(true);
   });
 });
